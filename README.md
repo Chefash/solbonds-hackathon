@@ -9,14 +9,14 @@ NFT matchmaking protocol with compatibility-based rewards backed by real DeFi yi
 - **Real Yield:** 8% APY from Kamino, MarginFi, Sanctum, Orca, SolBlaze
 - **Sustainable:** Only distribute real inflow ($55.96/day)
 
-⭐ New Simple Rule
+## ⭐ New Simple Rule
 
 Your daily share = (Your Bond Stake × Your Risk Score) / Total Weighted Scores
 
 No fake APR, no magic yield, no unrealistic multipliers.
 It uses user-submitted risk level as the weight.
 
-⭐ Why this works
+## ⭐ Why this works
 
 Doesn’t require insane yield.
 
@@ -28,7 +28,7 @@ Pairs with higher risk scores simply get a bigger slice of the daily reward pie.
 
 Works even if the vault only earns small, realistic yield.
 
-⭐ Example
+## ⭐ Example
 
 Vault yield today: $50
 
@@ -40,7 +40,7 @@ C-D	100 USDC	3	300
 
 Total weight = 1100
 
-Earnings
+### Earnings
 
 Pair A-B: (800 / 1100) × 50 = $36.36/day
 
@@ -50,7 +50,7 @@ No magic multipliers.
 No breaking sustainability.
 Just proportional distribution.
 
-⭐ Bonus twist (optional but fun)
+## ⭐ Bonus twist (optional but fun)
 
 Make the user enter their risk score during profile creation:
 
@@ -60,13 +60,13 @@ Make the user enter their risk score during profile creation:
 
 8–10: Degens, spicy yield slice
 
-You can even warn them:
+### You can even warn them:
 
 “Higher risk scores earn more, but break-ups cost more too.”
 
 This adds real game theory.
 
-⭐ And now this ties perfectly into matchmaking
+## ⭐ And now this ties perfectly into matchmaking
 
 Risk Score becomes one of the matching metrics, BUT it now also affects real earnings.
 So users suddenly care about:
@@ -79,7 +79,7 @@ So users suddenly care about:
 
 Spicy.
 
-⭐ Sustainability
+## ⭐ Sustainability
 
 This model works because:
 
