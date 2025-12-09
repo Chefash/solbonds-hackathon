@@ -235,9 +235,9 @@ pub struct BondAccount {
 
 ## 📹 Demo & Links
 
-- **Live Demo**: 
+- **Live Demo**:https://chefash.github.io/solbonds-hackathon/ 
 - **Video Walkthrough**: 
-- **GitHub**: https://github.com/Chefash/SOLBonds
+- **GitHub**: https://github.com/Chefash/solbonds-hackathon
 - **Twitter**: [@solbondsNFT](https://x.com/solbondsNFT)
 - **Email**: [SolBonds.NFT@yahoo.com](https://solbonds.NFT@yahoo.com)
 - **Discord**:https://discord.gg/zF2edcJNCJ 
