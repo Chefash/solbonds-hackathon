@@ -1,43 +1,1016 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>SOLBonds</title>
-<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>☀️ SOLBonds - Stablecoin-Backed NFT Matchmaking</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #d946ef;
+            --primary-dark: #a21caf;
+            --secondary: #06b6d4;
+            --accent: #f472b6;
+            --dark: #0f0f23;
+            --darker: #080816;
+            --light: #f8fafc;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --gradient-1: linear-gradient(135deg, #d946ef 0%, #f472b6 50%, #06b6d4 100%);
+            --gradient-2: linear-gradient(135deg, #a21caf 0%, #d946ef 100%);
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--darker);
+            color: var(--light);
+            min-height: 100vh;
+        }
+        
+        .bg-effects {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            background: radial-gradient(ellipse at 30% 20%, rgba(217, 70, 239, 0.15) 0%, transparent 50%),
+                        radial-gradient(ellipse at 70% 80%, rgba(6, 182, 212, 0.1) 0%, transparent 50%);
+        }
+        
+        nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 1000;
+            padding: 1rem 2rem;
+            background: rgba(8, 8, 22, 0.9);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo { height: 45px; border-radius: 8px; }
+        
+        .nav-tabs {
+            display: flex;
+            gap: 0.5rem;
+            background: var(--glass);
+            padding: 0.25rem;
+            border-radius: 12px;
+        }
+        
+        .nav-tab {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            background: transparent;
+            color: var(--light);
+            font-family: inherit;
+            font-weight: 500;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .nav-tab:hover { background: rgba(217, 70, 239, 0.2); }
+        .nav-tab.active { background: var(--gradient-2); }
+        
+        .wallet-btn {
+            padding: 0.75rem 1.5rem;
+            background: var(--gradient-1);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-family: inherit;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .wallet-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(217, 70, 239, 0.4); }
+        .wallet-btn.connected { background: var(--glass); border: 1px solid var(--success); }
+        
+        main {
+            position: relative;
+            z-index: 1;
+            padding-top: 100px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-left: 2rem;
+            padding-right: 2rem;
+        }
+        
+        .section { display: none; animation: fadeIn 0.5s; }
+        .section.active { display: block; }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* HOME */
+        .hero {
+            text-align: center;
+            padding: 3rem 0;
+        }
+        
+        .hero-logo {
+            max-width: 450px;
+            width: 100%;
+            margin-bottom: 2rem;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .hero h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+        
+        .hero p {
+            font-size: 1.1rem;
+            color: rgba(255,255,255,0.7);
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+        
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 12px;
+            font-family: inherit;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .btn-primary { background: var(--gradient-1); color: white; }
+        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 15px 40px rgba(217, 70, 239, 0.4); }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 3rem 0;
+        }
+        
+        .stat-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        
+        .stat-card:hover { transform: translateY(-5px); border-color: var(--primary); }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .stat-label { color: rgba(255,255,255,0.6); font-size: 0.9rem; margin-top: 0.5rem; }
+        
+        .tiers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+        
+        .tier-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        
+        .tier-card:hover { transform: translateY(-5px); border-color: var(--primary); }
+        .tier-days { font-size: 0.85rem; color: var(--secondary); font-weight: 600; }
+        .tier-rate { font-size: 1.5rem; font-weight: 700; color: var(--primary); }
+        .tier-multiplier { font-size: 0.9rem; color: rgba(255,255,255,0.6); }
+        
+        /* APP */
+        .app-container { max-width: 700px; margin: 0 auto; }
+        .app-step { display: none; }
+        .app-step.active { display: block; animation: slideIn 0.5s; }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        .card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .card-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
+        .card-icon {
+            width: 50px; height: 50px;
+            background: var(--gradient-1);
+            border-radius: 14px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.5rem;
+        }
+        .card-title { font-size: 1.5rem; font-weight: 700; }
+        .card-subtitle { font-size: 0.9rem; color: rgba(255,255,255,0.6); }
+        
+        .form-group { margin-bottom: 1.5rem; }
+        .form-label { display: block; margin-bottom: 0.5rem; font-weight: 500; }
+        
+        .form-input, .form-select {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            color: var(--light);
+            font-family: inherit;
+            font-size: 1rem;
+        }
+        
+        .form-input:focus, .form-select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        .radio-group { display: flex; gap: 1rem; flex-wrap: wrap; }
+        .radio-option { flex: 1; min-width: 100px; }
+        .radio-option input { display: none; }
+        .radio-option label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem;
+            background: rgba(0,0,0,0.3);
+            border: 2px solid var(--glass-border);
+            border-radius: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .radio-option label:hover { border-color: var(--primary); }
+        .radio-option input:checked + label { border-color: var(--primary); background: rgba(217, 70, 239, 0.15); }
+        .radio-icon { font-size: 2rem; }
+        
+        .slider-container { padding: 0.5rem 0; }
+        .slider-labels { display: flex; justify-content: space-between; margin-bottom: 0.5rem; }
+        .slider-value { font-weight: 600; color: var(--primary); }
+        
+        input[type="range"] {
+            width: 100%;
+            height: 8px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 4px;
+            -webkit-appearance: none;
+        }
+        
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 24px; height: 24px;
+            background: var(--gradient-1);
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        
+        .match-card {
+            background: linear-gradient(135deg, rgba(217, 70, 239, 0.1), rgba(6, 182, 212, 0.1));
+            border: 2px solid var(--primary);
+            border-radius: 24px;
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        .match-avatars { display: flex; justify-content: center; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
+        .match-avatar {
+            width: 80px; height: 80px;
+            background: var(--gradient-1);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 2.5rem;
+            border: 3px solid var(--dark);
+        }
+        .match-heart { font-size: 2rem; animation: heartbeat 1s infinite; }
+        
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+        
+        .compatibility-score {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .compatibility-label { font-size: 1.2rem; color: rgba(255,255,255,0.8); margin-bottom: 1.5rem; }
+        
+        .compat-breakdown {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin: 1.5rem 0;
+            text-align: left;
+        }
+        
+        .compat-item {
+            background: rgba(0,0,0,0.2);
+            padding: 1rem;
+            border-radius: 12px;
+        }
+        
+        .compat-item-header { display: flex; justify-content: space-between; margin-bottom: 0.5rem; }
+        .compat-item-label { font-size: 0.85rem; color: rgba(255,255,255,0.7); }
+        .compat-item-value { font-weight: 600; color: var(--secondary); }
+        
+        .compat-bar { height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden; }
+        .compat-bar-fill { height: 100%; background: var(--gradient-1); border-radius: 3px; }
+        
+        .bond-dashboard { display: grid; gap: 1.5rem; }
+        .bond-header {
+            background: linear-gradient(135deg, rgba(217, 70, 239, 0.15), rgba(6, 182, 212, 0.15));
+            border: 1px solid var(--primary);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        .bond-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--success);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        
+        .bond-timer {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .bond-tier { color: var(--secondary); font-weight: 600; }
+        
+        .earnings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+        }
+        
+        .earnings-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 1.25rem;
+        }
+        
+        .earnings-label { font-size: 0.85rem; color: rgba(255,255,255,0.6); margin-bottom: 0.5rem; }
+        .earnings-value { font-size: 1.5rem; font-weight: 700; color: var(--success); }
+        .earnings-subtext { font-size: 0.8rem; color: rgba(255,255,255,0.5); }
+        
+        /* TOKENOMICS */
+        .tokenomics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+        
+        .tokenomics-card { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 24px; padding: 2rem; }
+        .tokenomics-card h3 { font-size: 1.25rem; margin-bottom: 1.5rem; }
+        
+        .revenue-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--glass-border);
+        }
+        .revenue-item:last-child { border-bottom: none; }
+        .revenue-source { display: flex; align-items: center; gap: 0.75rem; }
+        .revenue-icon { width: 36px; height: 36px; background: var(--glass); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+        .revenue-amount { font-weight: 600; color: var(--success); }
+        
+        .vault-item { margin-bottom: 1rem; }
+        .vault-header { display: flex; justify-content: space-between; margin-bottom: 0.5rem; }
+        .vault-bar { height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden; }
+        .vault-bar-fill { height: 100%; border-radius: 4px; }
+        
+        .formula-box {
+            background: rgba(0,0,0,0.3);
+            border: 1px solid var(--secondary);
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+        .formula-label { font-size: 0.85rem; color: var(--secondary); margin-bottom: 0.75rem; }
+        .formula-text { font-family: monospace; font-size: 0.85rem; line-height: 1.8; }
+        
+        .section-title { text-align: center; font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem; }
+        .section-subtitle { text-align: center; color: rgba(255,255,255,0.6); margin-bottom: 2rem; }
+        
+        @media (max-width: 768px) {
+            nav { padding: 0.75rem 1rem; }
+            .nav-tabs { display: none; }
+            main { padding-top: 80px; }
+            .compat-breakdown { grid-template-columns: 1fr; }
+        }
+    </style>
 </head>
-<body class="bg-gray-900 text-white">
-<div class="max-w-4xl mx-auto p-8">
-
-    <!-- HERO STATS FIXED -->
-    <div class="grid grid-cols-3 gap-8 max-w-2xl mx-auto mt-12">
-        <div class="bg-white bg-opacity-10 backdrop-blur rounded-lg p-4">
-            <div class="text-3xl font-bold text-pink-400">8% APY</div>
-            <div class="text-sm text-gray-300">Real Vault Yield</div>
+<body>
+    <div class="bg-effects"></div>
+    
+    <nav>
+        <img src="logo.png" alt="SOLBonds" class="logo">
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showSection('home')">🏠 Home</button>
+            <button class="nav-tab" onclick="showSection('app')">🎮 App</button>
+            <button class="nav-tab" onclick="showSection('tokenomics')">📊 Tokenomics</button>
         </div>
-        <div class="bg-white bg-opacity-10 backdrop-blur rounded-lg p-4">
-            <div class="text-3xl font-bold text-green-400">$55/day</div>
-            <div class="text-sm text-gray-300">Daily Payouts</div>
-        </div>
-        <div class="bg-white bg-opacity-10 backdrop-blur rounded-lg p-4">
-            <div class="text-3xl font-bold text-blue-400">Sustainable</div>
-            <div class="text-sm text-gray-300">No Ponzi Math</div>
-        </div>
-    </div>
-
-    <!-- TAB 2: APP -->
-    <div id="content-app" class="px-4 py-8">
-        <div id="app-welcome">
-            <div class="text-center py-20">
-                <h2 class="text-5xl font-bold mb-6">Ready to Find Your Match?</h2>
-                <p class="text-xl text-gray-400 mb-8">Create your profile to get started</p>
-                <button onclick="alert('Profile screen placeholder')" class="bg-gradient-to-r from-pink-600 to-purple-600 hover:opacity-90 font-bold py-4 px-12 rounded-full text-xl">
-                    Create Profile
-                </button>
+        <button class="wallet-btn" id="walletBtn" onclick="connectWallet()">🔗 Connect Wallet</button>
+    </nav>
+    
+    <main>
+        <!-- HOME SECTION -->
+        <div id="home" class="section active">
+            <div class="hero">
+                <img src="logo.png" alt="SOLBonds" class="hero-logo">
+                <h1>Find Your SOLmate. Earn Together.</h1>
+                <p>The first stablecoin-backed NFT matchmaking protocol on Solana. Get matched based on compatibility and earn real yield the longer you stay bonded.</p>
+                <button class="btn btn-primary" onclick="showSection('app')">🚀 Launch App</button>
+            </div>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value">$50,000</div>
+                    <div class="stat-label">Total Value Locked</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">127</div>
+                    <div class="stat-label">Active Bonds</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">8.2%</div>
+                    <div class="stat-label">Vault APY</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">$55.96</div>
+                    <div class="stat-label">Daily Rewards</div>
+                </div>
+            </div>
+            
+            <h2 class="section-title">⏰ Time-Based Reward Tiers</h2>
+            <p class="section-subtitle">The longer you stay bonded, the more you earn!</p>
+            
+            <div class="tiers-grid">
+                <div class="tier-card">
+                    <div class="tier-days">Days 1-7</div>
+                    <div class="tier-rate">1.0x</div>
+                    <div class="tier-multiplier">Spark 🌱</div>
+                </div>
+                <div class="tier-card">
+                    <div class="tier-days">Days 8-30</div>
+                    <div class="tier-rate">1.5x</div>
+                    <div class="tier-multiplier">Flame 🔥</div>
+                </div>
+                <div class="tier-card">
+                    <div class="tier-days">Days 31-90</div>
+                    <div class="tier-rate">2.5x</div>
+                    <div class="tier-multiplier">Fire ⭐</div>
+                </div>
+                <div class="tier-card">
+                    <div class="tier-days">Days 91-180</div>
+                    <div class="tier-rate">4.0x</div>
+                    <div class="tier-multiplier">Inferno 💎</div>
+                </div>
+                <div class="tier-card">
+                    <div class="tier-days">Days 181+</div>
+                    <div class="tier-rate">6.0x</div>
+                    <div class="tier-multiplier">Eternal 👑</div>
+                </div>
             </div>
         </div>
-    </div>
-
-</div>
+        
+        <!-- APP SECTION -->
+        <div id="app" class="section">
+            <div class="app-container">
+                <!-- Step 1: Connect -->
+                <div id="step1" class="app-step active">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-icon">🔗</div>
+                            <div>
+                                <div class="card-title">Connect Your Wallet</div>
+                                <div class="card-subtitle">Start your journey to find your SOLmate</div>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary" style="width:100%" onclick="startProfile()">Connect & Get Started</button>
+                    </div>
+                </div>
+                
+                <!-- Step 2: Profile -->
+                <div id="step2" class="app-step">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-icon">🎭</div>
+                            <div>
+                                <div class="card-title">Create Your Profile</div>
+                                <div class="card-subtitle">Tell us about yourself for better matches</div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Username</label>
+                            <input type="text" class="form-input" id="username" placeholder="Your display name">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Gender Identity</label>
+                            <div class="radio-group">
+                                <div class="radio-option">
+                                    <input type="radio" name="gender" id="masculine" value="masculine">
+                                    <label for="masculine">
+                                        <span class="radio-icon">♂️</span>
+                                        <span>Masculine</span>
+                                    </label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="gender" id="feminine" value="feminine">
+                                    <label for="feminine">
+                                        <span class="radio-icon">♀️</span>
+                                        <span>Feminine</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Zodiac Sign</label>
+                            <select class="form-input form-select" id="zodiac">
+                                <option value="">Select your sign...</option>
+                                <option value="aries">♈ Aries</option>
+                                <option value="taurus">♉ Taurus</option>
+                                <option value="gemini">♊ Gemini</option>
+                                <option value="cancer">♋ Cancer</option>
+                                <option value="leo">♌ Leo</option>
+                                <option value="virgo">♍ Virgo</option>
+                                <option value="libra">♎ Libra</option>
+                                <option value="scorpio">♏ Scorpio</option>
+                                <option value="sagittarius">♐ Sagittarius</option>
+                                <option value="capricorn">♑ Capricorn</option>
+                                <option value="aquarius">♒ Aquarius</option>
+                                <option value="pisces">♓ Pisces</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Pet Preference</label>
+                            <div class="radio-group">
+                                <div class="radio-option">
+                                    <input type="radio" name="pet" id="dog" value="dog">
+                                    <label for="dog">
+                                        <span class="radio-icon">🐕</span>
+                                        <span>Dog</span>
+                                    </label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="pet" id="cat" value="cat">
+                                    <label for="cat">
+                                        <span class="radio-icon">🐱</span>
+                                        <span>Cat</span>
+                                    </label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="pet" id="both" value="both">
+                                    <label for="both">
+                                        <span class="radio-icon">🐾</span>
+                                        <span>Both</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Risk Tolerance</label>
+                            <div class="slider-container">
+                                <div class="slider-labels">
+                                    <span>Conservative</span>
+                                    <span class="slider-value" id="riskValue">5</span>
+                                    <span>Aggressive</span>
+                                </div>
+                                <input type="range" id="risk" min="1" max="10" value="5" oninput="updateRisk()">
+                            </div>
+                        </div>
+                        
+                        <button class="btn btn-primary" style="width:100%" onclick="createProfile()">Create Profile (5 USDC)</button>
+                    </div>
+                </div>
+                
+                <!-- Step 3: Match -->
+                <div id="step3" class="app-step">
+                    <div class="match-card">
+                        <div class="match-avatars">
+                            <div class="match-avatar" id="userAvatar">🧑</div>
+                            <div class="match-heart">💕</div>
+                            <div class="match-avatar" id="matchAvatar">👤</div>
+                        </div>
+                        
+                        <div class="compatibility-score" id="compatScore">87%</div>
+                        <div class="compatibility-label">Compatibility Score</div>
+                        
+                        <div class="compat-breakdown">
+                            <div class="compat-item">
+                                <div class="compat-item-header">
+                                    <span class="compat-item-label">🚻 Gender</span>
+                                    <span class="compat-item-value" id="genderScore">20/20</span>
+                                </div>
+                                <div class="compat-bar"><div class="compat-bar-fill" id="genderBar" style="width:100%"></div></div>
+                            </div>
+                            <div class="compat-item">
+                                <div class="compat-item-header">
+                                    <span class="compat-item-label">♈ Zodiac</span>
+                                    <span class="compat-item-value" id="zodiacScore">24/30</span>
+                                </div>
+                                <div class="compat-bar"><div class="compat-bar-fill" id="zodiacBar" style="width:80%"></div></div>
+                            </div>
+                            <div class="compat-item">
+                                <div class="compat-item-header">
+                                    <span class="compat-item-label">🐾 Pets</span>
+                                    <span class="compat-item-value" id="petScore">25/25</span>
+                                </div>
+                                <div class="compat-bar"><div class="compat-bar-fill" id="petBar" style="width:100%"></div></div>
+                            </div>
+                            <div class="compat-item">
+                                <div class="compat-item-header">
+                                    <span class="compat-item-label">📊 Risk</span>
+                                    <span class="compat-item-value" id="riskScore">18/25</span>
+                                </div>
+                                <div class="compat-bar"><div class="compat-bar-fill" id="riskBar" style="width:72%"></div></div>
+                            </div>
+                        </div>
+                        
+                        <p id="matchName" style="margin-bottom:1rem;color:rgba(255,255,255,0.7)">Your potential SOLmate: <strong>Luna</strong></p>
+                        <p id="compatBonus" style="margin-bottom:1.5rem;color:var(--success);font-weight:600">🔥 Soulmate Bonus: 2.0x rewards!</p>
+                        
+                        <div style="display:flex;gap:1rem">
+                            <button class="btn" style="flex:1;background:rgba(255,255,255,0.1);color:white" onclick="rejectMatch()">❌ Pass</button>
+                            <button class="btn btn-primary" style="flex:1" onclick="acceptBond()">💕 Accept Bond</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Step 4: Dashboard -->
+                <div id="step4" class="app-step">
+                    <div class="bond-dashboard">
+                        <div class="bond-header">
+                            <div class="bond-status">● Bonded</div>
+                            <div class="bond-timer" id="bondDays">Day 1</div>
+                            <div class="bond-tier" id="bondTier">Tier 1: Spark 🌱 (1.0x)</div>
+                        </div>
+                        
+                        <div class="earnings-grid">
+                            <div class="earnings-card">
+                                <div class="earnings-label">Daily Earnings</div>
+                                <div class="earnings-value" id="dailyEarnings">$2.24</div>
+                                <div class="earnings-subtext">Tier × Compatibility</div>
+                            </div>
+                            <div class="earnings-card">
+                                <div class="earnings-label">Total Earned</div>
+                                <div class="earnings-value" id="totalEarned">$2.24</div>
+                                <div class="earnings-subtext">Since bonding</div>
+                            </div>
+                            <div class="earnings-card">
+                                <div class="earnings-label">Compatibility</div>
+                                <div class="earnings-value" id="dashCompat">87%</div>
+                                <div class="earnings-subtext">2.0x bonus</div>
+                            </div>
+                            <div class="earnings-card">
+                                <div class="earnings-label">Next Tier In</div>
+                                <div class="earnings-value" id="nextTier">6 days</div>
+                                <div class="earnings-subtext">+50% earnings</div>
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <h3 style="margin-bottom:1rem">Your Bond Partner</h3>
+                            <div style="display:flex;align-items:center;gap:1rem">
+                                <div class="match-avatar" style="width:60px;height:60px;font-size:2rem">👤</div>
+                                <div>
+                                    <div style="font-weight:600" id="partnerName">Luna</div>
+                                    <div style="color:rgba(255,255,255,0.6);font-size:0.9rem">♋ Cancer • 🐱 Cat Lover • Risk: 6/10</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <button class="btn" style="width:100%;background:rgba(239,68,68,0.2);color:#ef4444;border:1px solid #ef4444" onclick="breakBond()">💔 Break Bond (5 USDC fee)</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- TOKENOMICS SECTION -->
+        <div id="tokenomics" class="section">
+            <h2 class="section-title">💰 Sustainable Tokenomics</h2>
+            <p class="section-subtitle">Real yield from DeFi protocols, not printed tokens</p>
+            
+            <div class="tokenomics-grid">
+                <div class="tokenomics-card">
+                    <h3>📥 Daily Revenue Sources</h3>
+                    <div class="revenue-item">
+                        <div class="revenue-source">
+                            <div class="revenue-icon">🌱</div>
+                            <span>Vault Yield (8% APY)</span>
+                        </div>
+                        <span class="revenue-amount">$10.96/day</span>
+                    </div>
+                    <div class="revenue-item">
+                        <div class="revenue-source">
+                            <div class="revenue-icon">🎰</div>
+                            <span>Discovery Bets</span>
+                        </div>
+                        <span class="revenue-amount">$15.00/day</span>
+                    </div>
+                    <div class="revenue-item">
+                        <div class="revenue-source">
+                            <div class="revenue-icon">💕</div>
+                            <span>Mint Fees</span>
+                        </div>
+                        <span class="revenue-amount">$25.00/day</span>
+                    </div>
+                    <div class="revenue-item">
+                        <div class="revenue-source">
+                            <div class="revenue-icon">💔</div>
+                            <span>Breakup Fees</span>
+                        </div>
+                        <span class="revenue-amount">$5.00/day</span>
+                    </div>
+                    <div class="revenue-item" style="border-top:2px solid var(--primary);padding-top:1rem">
+                        <div class="revenue-source">
+                            <div class="revenue-icon">💰</div>
+                            <strong>Total Daily Inflow</strong>
+                        </div>
+                        <span class="revenue-amount" style="font-size:1.25rem">$55.96/day</span>
+                    </div>
+                </div>
+                
+                <div class="tokenomics-card">
+                    <h3>🏦 Vault Allocation</h3>
+                    <div class="vault-item">
+                        <div class="vault-header">
+                            <span>Kamino Finance</span>
+                            <span>40% • ~24% APY</span>
+                        </div>
+                        <div class="vault-bar"><div class="vault-bar-fill" style="width:40%;background:var(--primary)"></div></div>
+                    </div>
+                    <div class="vault-item">
+                        <div class="vault-header">
+                            <span>MarginFi</span>
+                            <span>25% • ~12% APY</span>
+                        </div>
+                        <div class="vault-bar"><div class="vault-bar-fill" style="width:25%;background:var(--secondary)"></div></div>
+                    </div>
+                    <div class="vault-item">
+                        <div class="vault-header">
+                            <span>Sanctum</span>
+                            <span>15% • ~8% APY</span>
+                        </div>
+                        <div class="vault-bar"><div class="vault-bar-fill" style="width:15%;background:var(--accent)"></div></div>
+                    </div>
+                    <div class="vault-item">
+                        <div class="vault-header">
+                            <span>Orca Treasury</span>
+                            <span>10% • ~6% APY</span>
+                        </div>
+                        <div class="vault-bar"><div class="vault-bar-fill" style="width:10%;background:var(--success)"></div></div>
+                    </div>
+                    <div class="vault-item">
+                        <div class="vault-header">
+                            <span>SolBlaze LST</span>
+                            <span>10% • ~7% APY</span>
+                        </div>
+                        <div class="vault-bar"><div class="vault-bar-fill" style="width:10%;background:var(--warning)"></div></div>
+                    </div>
+                    
+                    <div class="formula-box">
+                        <div class="formula-label">📊 Sustainable Earnings Formula</div>
+                        <div class="formula-text">
+                            Daily Earnings =<br>
+                            (Real Yield + User Fees) ÷ Active Pairs<br>
+                            × Time Tier × Compatibility
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <script>
+        // App State
+        let state = {
+            walletConnected: false,
+            walletAddress: null,
+            profile: null,
+            match: null,
+            bond: null,
+            bondStartTime: null,
+            compatibility: 0
+        };
+        
+        // Navigation
+        function showSection(sectionId) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+        
+        // Wallet
+        function connectWallet() {
+            state.walletConnected = true;
+            state.walletAddress = 'Gh7x...4kPq';
+            document.getElementById('walletBtn').textContent = '✅ ' + state.walletAddress;
+            document.getElementById('walletBtn').classList.add('connected');
+        }
+        
+        // App Steps
+        function startProfile() {
+            if (!state.walletConnected) connectWallet();
+            document.querySelectorAll('.app-step').forEach(s => s.classList.remove('active'));
+            document.getElementById('step2').classList.add('active');
+        }
+        
+        function updateRisk() {
+            document.getElementById('riskValue').textContent = document.getElementById('risk').value;
+        }
+        
+        function createProfile() {
+            const username = document.getElementById('username').value || 'Anonymous';
+            const gender = document.querySelector('input[name="gender"]:checked')?.value || 'masculine';
+            const zodiac = document.getElementById('zodiac').value || 'leo';
+            const pet = document.querySelector('input[name="pet"]:checked')?.value || 'dog';
+            const risk = parseInt(document.getElementById('risk').value);
+            
+            state.profile = { username, gender, zodiac, pet, risk };
+            generateMatch();
+            
+            document.querySelectorAll('.app-step').forEach(s => s.classList.remove('active'));
+            document.getElementById('step3').classList.add('active');
+        }
+        
+        function generateMatch() {
+            const names = ['Luna', 'Nova', 'Stella', 'Aurora', 'Celeste', 'Orion', 'Atlas', 'Phoenix'];
+            const zodiacs = ['aries','taurus','gemini','cancer','leo','virgo','libra','scorpio','sagittarius','capricorn','aquarius','pisces'];
+            const pets = ['dog', 'cat', 'both'];
+            
+            state.match = {
+                name: names[Math.floor(Math.random() * names.length)],
+                gender: state.profile.gender === 'masculine' ? 'feminine' : 'masculine',
+                zodiac: zodiacs[Math.floor(Math.random() * zodiacs.length)],
+                pet: pets[Math.floor(Math.random() * pets.length)],
+                risk: Math.floor(Math.random() * 10) + 1
+            };
+            
+            calculateCompatibility();
+        }
+        
+        function calculateCompatibility() {
+            let genderScore = state.profile.gender !== state.match.gender ? 20 : 10;
+            
+            const zodiacCompat = {
+                fire: ['aries', 'leo', 'sagittarius'],
+                earth: ['taurus', 'virgo', 'capricorn'],
+                air: ['gemini', 'libra', 'aquarius'],
+                water: ['cancer', 'scorpio', 'pisces']
+            };
+            
+            let userElement, matchElement;
+            for (let [element, signs] of Object.entries(zodiacCompat)) {
+                if (signs.includes(state.profile.zodiac)) userElement = element;
+                if (signs.includes(state.match.zodiac)) matchElement = element;
+            }
+            let zodiacScore = userElement === matchElement ? 30 : 15 + Math.floor(Math.random() * 10);
+            
+            let petScore = state.profile.pet === state.match.pet ? 25 : 
+                          (state.profile.pet === 'both' || state.match.pet === 'both' ? 20 : 10);
+            
+            let riskDiff = Math.abs(state.profile.risk - state.match.risk);
+            let riskScore = Math.max(5, 25 - (riskDiff * 3));
+            
+            state.compatibility = genderScore + zodiacScore + petScore + riskScore;
+            
+            // Update UI
+            document.getElementById('compatScore').textContent = state.compatibility + '%';
+            document.getElementById('genderScore').textContent = genderScore + '/20';
+            document.getElementById('zodiacScore').textContent = zodiacScore + '/30';
+            document.getElementById('petScore').textContent = petScore + '/25';
+            document.getElementById('riskScore').textContent = riskScore + '/25';
+            
+            document.getElementById('genderBar').style.width = (genderScore/20*100) + '%';
+            document.getElementById('zodiacBar').style.width = (zodiacScore/30*100) + '%';
+            document.getElementById('petBar').style.width = (petScore/25*100) + '%';
+            document.getElementById('riskBar').style.width = (riskScore/25*100) + '%';
+            
+            document.getElementById('matchName').innerHTML = 'Your potential SOLmate: <strong>' + state.match.name + '</strong>';
+            
+            let bonus = state.compatibility >= 90 ? '2.0x' : state.compatibility >= 80 ? '1.5x' : state.compatibility >= 70 ? '1.2x' : '1.0x';
+            let bonusLabel = state.compatibility >= 90 ? '🔥 Soulmate' : state.compatibility >= 80 ? '💕 Great Match' : state.compatibility >= 70 ? '💛 Good Match' : '⚡ Base';
+            document.getElementById('compatBonus').textContent = bonusLabel + ' Bonus: ' + bonus + ' rewards!';
+            
+            document.getElementById('userAvatar').textContent = state.profile.gender === 'masculine' ? '🧑' : '👩';
+            document.getElementById('matchAvatar').textContent = state.match.gender === 'masculine' ? '🧑' : '👩';
+        }
+        
+        function rejectMatch() {
+            generateMatch();
+        }
+        
+        function acceptBond() {
+            state.bond = { partner: state.match, startTime: Date.now() };
+            state.bondStartTime = Date.now();
+            
+            document.querySelectorAll('.app-step').forEach(s => s.classList.remove('active'));
+            document.getElementById('step4').classList.add('active');
+            
+            document.getElementById('partnerName').textContent = state.match.name;
+            document.getElementById('dashCompat').textContent = state.compatibility + '%';
+            
+            updateDashboard();
+            setInterval(updateDashboard, 1000);
+        }
+        
+        function updateDashboard() {
+            if (!state.bondStartTime) return;
+            
+            let elapsed = (Date.now() - state.bondStartTime) / 1000;
+            let days = Math.floor(elapsed / 10) + 1; // 10 seconds = 1 day for demo
+            
+            document.getElementById('bondDays').textContent = 'Day ' + days;
+            
+            let tier, tierName, multiplier;
+            if (days >= 181) { tier = 5; tierName = 'Eternal 👑'; multiplier = 6.0; }
+            else if (days >= 91) { tier = 4; tierName = 'Inferno 💎'; multiplier = 4.0; }
+            else if (days >= 31) { tier = 3; tierName = 'Fire ⭐'; multiplier = 2.5; }
+            else if (days >= 8) { tier = 2; tierName = 'Flame 🔥'; multiplier = 1.5; }
+            else { tier = 1; tierName = 'Spark 🌱'; multiplier = 1.0; }
+            
+            document.getElementById('bondTier').textContent = 'Tier ' + tier + ': ' + tierName + ' (' + multiplier + 'x)';
+            
+            let compatMultiplier = state.compatibility >= 90 ? 2.0 : state.compatibility >= 80 ? 1.5 : state.compatibility >= 70 ? 1.2 : 1.0;
+            let baseDaily = 55.96 / 50; // $55.96 pool / 50 pairs
+            let dailyEarnings = (baseDaily * multiplier * compatMultiplier).toFixed(2);
+            let totalEarnings = (dailyEarnings * days).toFixed(2);
+            
+            document.getElementById('dailyEarnings').textContent = '$' + dailyEarnings;
+            document.getElementById('totalEarned').textContent = '$' + totalEarnings;
+            
+            let nextTierDays = days < 8 ? 8 - days : days < 31 ? 31 - days : days < 91 ? 91 - days : days < 181 ? 181 - days : 0;
+            document.getElementById('nextTier').textContent = nextTierDays > 0 ? nextTierDays + ' days' : 'MAX!';
+        }
+        
+        function breakBond() {
+            if (confirm('Are you sure? You will pay a 5 USDC breakup fee.')) {
+                state.bond = null;
+                state.bondStartTime = null;
+                document.querySelectorAll('.app-step').forEach(s => s.classList.remove('active'));
+                document.getElementById('step1').classList.add('active');
+            }
+        }
+        
+        console.log('☀️ SOLBonds App Loaded!');
+    </script>
 </body>
 </html>
