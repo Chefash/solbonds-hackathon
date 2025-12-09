@@ -239,7 +239,8 @@ pub struct BondAccount {
 - **Video Walkthrough**: 
 - **GitHub**: https://github.com/Chefash/SOLBonds
 - **Twitter**: [@solbondsNFT](https://x.com/solbondsNFT)
-- **Discord**: 
+- **Email**: [SolBonds.NFT@yahoo.com](https://solbonds.NFT@yahoo.com)
+- **Discord**:https://discord.gg/zF2edcJNCJ 
 
 ## 👥 Team
 
@@ -251,4 +252,4 @@ MIT License - Build on it, fork it, make it yours!
 
 ---
 
-**Built for Indie.fun Hackathon 2024** | Solana DeFi × Social Gaming | ☀️ Find Your SOLmate
+**Built for Indie.fun Hackathon 2025** | Solana DeFi × Social Gaming | ☀️ Find Your SOLmate
