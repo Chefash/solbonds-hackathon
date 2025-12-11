@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOLBonds - Boosts & Power-Ups</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .gradient-bg {
+            background: linear-gradient(-45deg, #f59e0b, #ec4899, #8b5cf6, #3b82f6);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+        }
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(236, 72, 153, 0.4); }
+            50% { box-shadow: 0 0 40px rgba(236, 72, 153, 0.7); }
+        }
+        .pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        .float { animation: float 3s ease-in-out infinite; }
+    </style>
+</head>
+<body class="bg-gray-900 text-white min-h-screen">
+    
+    <!-- Nav -->
+    <nav class="bg-gray-800 border-b border-gray-700 px-6 py-4">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <a href="app.html" class="flex items-center gap-2 hover:opacity-80 transition-opacity">
+                <img src="logo2.png" alt="SOLBonds" class="h-10 rounded-lg">
+            </a>
+            <div class="flex gap-4">
+                <a href="app.html" class="text-gray-400 hover:text-white transition-colors">App</a>
+                <a href="boosts.html" class="text-pink-400 font-bold">Boosts</a>
+                <a href="tokenomics.html" class="text-gray-400 hover:text-white transition-colors">Tokenomics</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-6xl mx-auto px-4 py-12">
+        
+        <!-- Header -->
+        <div class="text-center mb-12">
+            <h1 class="text-5xl font-bold mb-4">✨ Boosts & Power-Ups</h1>
+            <p class="text-xl text-gray-400">Unlock your full potential. Strengthen your bond. Earn more.</p>
+        </div>
+
+        <!-- 🎰 SPEED DATING SECTION -->
+        <div class="mb-16">
+            <div class="flex items-center gap-4 mb-6">
+                <div class="text-5xl float">🎰</div>
+                <div>
+                    <h2 class="text-3xl font-bold text-yellow-400">Speed Dating</h2>
+                    <p class="text-gray-400">For singles looking for their SOLmate</p>
+                </div>
+            </div>
+            
+            <div class="bg-gray-800 rounded-2xl p-6 mb-6 border border-yellow-500/30">
+                <p class="text-gray-300 mb-4">
+                    By default, your compatibility is <span class="text-yellow-400 font-bold">capped at 70%</span>. 
+                    Your true compatibility could be much higher! Use Speed Dating boosts to reveal your real potential 
+                    and find better matches.
+                </p>
+                <div class="flex items-center gap-2 text-sm text-yellow-300">
+                    <span>💡</span>
+                    <span>Higher revealed compatibility = higher reward multipliers when you bond!</span>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-6">
+                <!-- Quick Peek -->
+                <div class="bg-gray-800 rounded-2xl p-6 border-2 border-gray-700 hover:border-yellow-500 transition-all hover:transform hover:scale-105">
+                    <div class="text-4xl mb-4">👀</div>
+                    <h3 class="text-xl font-bold mb-2">Quick Peek</h3>
+                    <div class="text-3xl font-bold text-yellow-400 mb-4">2 USDC</div>
+                    <ul class="text-gray-400 text-sm space-y-2 mb-6">
+                        <li>• Reveal 1 hidden trait of your match</li>
+                        <li>• See if zodiacs are compatible</li>
+                        <li>• Get a hint before committing</li>
+                    </ul>
+                    <button class="w-full bg-yellow-500 hover:bg-yellow-400 text-gray-900 font-bold py-3 rounded-lg transition-all">
+                        Get Peek
+                    </button>
+                </div>
+
+                <!-- Deep Reveal -->
+                <div class="bg-gray-800 rounded-2xl p-6 border-2 border-gray-700 hover:border-yellow-500 transition-all hover:transform hover:scale-105">
+                    <div class="text-4xl mb-4">🔮</div>
+                    <h3 class="text-xl font-bold mb-2">Deep Reveal</h3>
+                    <div class="text-3xl font-bold text-yellow-400 mb-4">5 USDC</div>
+                    <ul class="text-gray-400 text-sm space-y-2 mb-6">
+                        <li>• Raise compatibility cap to <span class="text-yellow-400">85%</span></li>
+                        <li>• Reveal zodiac & pet compatibility</li>
+                        <li>• See more accurate match potential</li>
+                    </ul>
+                    <button class="w-full bg-yellow-500 hover:bg-yellow-400 text-gray-900 font-bold py-3 rounded-lg transition-all">
+                        Deep Reveal
+                    </button>
+                </div>
+
+                <!-- Full Unlock -->
+                <div class="bg-gradient-to-br from-yellow-600 to-orange-600 rounded-2xl p-6 border-2 border-yellow-400 hover:transform hover:scale-105 transition-all pulse-glow">
+                    <div class="absolute top-2 right-2 bg-white text-yellow-600 text-xs font-bold px-2 py-1 rounded-full">BEST VALUE</div>
+                    <div class="text-4xl mb-4">💎</div>
+                    <h3 class="text-xl font-bold mb-2">Full Unlock</h3>
+                    <div class="text-3xl font-bold text-white mb-4">10 USDC</div>
+                    <ul class="text-yellow-100 text-sm space-y-2 mb-6">
+                        <li>• Remove ALL compatibility caps</li>
+                        <li>• See <span class="font-bold">true 100%</span> potential</li>
+                        <li>• Reveal all hidden traits</li>
+                        <li>• Find your perfect SOLmate!</li>
+                    </ul>
+                    <button class="w-full bg-white hover:bg-gray-100 text-yellow-600 font-bold py-3 rounded-lg transition-all">
+                        Full Unlock 💎
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 💆 COUPLES THERAPY SECTION -->
+        <div class="mb-16">
+            <div class="flex items-center gap-4 mb-6">
+                <div class="text-5xl float" style="animation-delay: 0.5s;">💆</div>
+                <div>
+                    <h2 class="text-3xl font-bold text-purple-400">Couples Therapy</h2>
+                    <p class="text-gray-400">For bonded pairs looking to grow stronger</p>
+                </div>
+            </div>
+            
+            <div class="bg-gray-800 rounded-2xl p-6 mb-6 border border-purple-500/30">
+                <p class="text-gray-300 mb-4">
+                    Already bonded? Strengthen your relationship and <span class="text-purple-400 font-bold">boost your compatibility score</span> over time! 
+                    Higher compatibility = higher reward multipliers = more USDC earnings.
+                </p>
+                <div class="flex items-center gap-2 text-sm text-purple-300">
+                    <span>💡</span>
+                    <span>Reach 90%+ compatibility to unlock the Soulmate Bonus (2x multiplier)! 🔥</span>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-6">
+                <!-- Quick Chat -->
+                <div class="bg-gray-800 rounded-2xl p-6 border-2 border-gray-700 hover:border-purple-500 transition-all hover:transform hover:scale-105">
+                    <div class="text-4xl mb-4">💬</div>
+                    <h3 class="text-xl font-bold mb-2">Quick Chat</h3>
+                    <div class="text-3xl font-bold text-purple-400 mb-2">3 USDC</div>
+                    <div class="text-green-400 font-bold mb-4">+2% Compatibility</div>
+                    <ul class="text-gray-400 text-sm space-y-2 mb-6">
+                        <li>• 15-minute check-in session</li>
+                        <li>• Address small issues</li>
+                        <li>• Quick boost for busy couples</li>
+                    </ul>
+                    <button class="w-full bg-purple-500 hover:bg-purple-400 text-white font-bold py-3 rounded-lg transition-all">
+                        Book Chat
+                    </button>
+                </div>
+
+                <!-- Full Session -->
+                <div class="bg-gray-800 rounded-2xl p-6 border-2 border-gray-700 hover:border-purple-500 transition-all hover:transform hover:scale-105">
+                    <div class="text-4xl mb-4">🛋️</div>
+                    <h3 class="text-xl font-bold mb-2">Full Session</h3>
+                    <div class="text-3xl font-bold text-purple-400 mb-2">7 USDC</div>
+                    <div class="text-green-400 font-bold mb-4">+5% Compatibility</div>
+                    <ul class="text-gray-400 text-sm space-y-2 mb-6">
+                        <li>• 1-hour deep dive session</li>
+                        <li>• Work through conflicts</li>
+                        <li>• Build stronger foundations</li>
+                    </ul>
+                    <button class="w-full bg-purple-500 hover:bg-purple-400 text-white font-bold py-3 rounded-lg transition-all">
+                        Book Session
+                    </button>
+                </div>
+
+                <!-- Intensive Retreat -->
+                <div class="bg-gradient-to-br from-purple-600 to-pink-600 rounded-2xl p-6 border-2 border-purple-400 hover:transform hover:scale-105 transition-all pulse-glow">
+                    <div class="absolute top-2 right-2 bg-white text-purple-600 text-xs font-bold px-2 py-1 rounded-full">MAX BOOST</div>
+                    <div class="text-4xl mb-4">💝</div>
+                    <h3 class="text-xl font-bold mb-2">Intensive Retreat</h3>
+                    <div class="text-3xl font-bold text-white mb-2">15 USDC</div>
+                    <div class="text-green-300 font-bold mb-4">+12% Compatibility!</div>
+                    <ul class="text-purple-100 text-sm space-y-2 mb-6">
+                        <li>• Full weekend retreat experience</li>
+                        <li>• Maximum compatibility boost</li>
+                        <li>• Fast-track to Soulmate status</li>
+                        <li>• Includes relationship assessment</li>
+                    </ul>
+                    <button class="w-full bg-white hover:bg-gray-100 text-purple-600 font-bold py-3 rounded-lg transition-all">
+                        Book Retreat 💝
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 🎁 BONUS BOOSTS SECTION -->
+        <div class="mb-16">
+            <div class="flex items-center gap-4 mb-6">
+                <div class="text-5xl float" style="animation-delay: 1s;">🎁</div>
+                <div>
+                    <h2 class="text-3xl font-bold text-green-400">Bonus Boosts</h2>
+                    <p class="text-gray-400">Extra perks to maximize your SOLBonds experience</p>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-4 gap-4">
+                <!-- Priority Matching -->
+                <div class="bg-gray-800 rounded-xl p-5 border border-gray-700 hover:border-green-500 transition-all">
+                    <div class="text-3xl mb-3">⚡</div>
+                    <h3 class="font-bold mb-1">Priority Queue</h3>
+                    <div class="text-green-400 font-bold mb-2">3 USDC</div>
+                    <p class="text-gray-400 text-xs">Skip the line & match faster</p>
+                </div>
+
+                <!-- Re-roll Match -->
+                <div class="bg-gray-800 rounded-xl p-5 border border-gray-700 hover:border-green-500 transition-all">
+                    <div class="text-3xl mb-3">🎲</div>
+                    <h3 class="font-bold mb-1">Re-roll Match</h3>
+                    <div class="text-green-400 font-bold mb-2">2 USDC</div>
+                    <p class="text-gray-400 text-xs">Get a new match instantly</p>
+                </div>
+
+                <!-- Profile Highlight -->
+                <div class="bg-gray-800 rounded-xl p-5 border border-gray-700 hover:border-green-500 transition-all">
+                    <div class="text-3xl mb-3">✨</div>
+                    <h3 class="font-bold mb-1">Profile Glow</h3>
+                    <div class="text-green-400 font-bold mb-2">5 USDC</div>
+                    <p class="text-gray-400 text-xs">Stand out in the matching pool</p>
+                </div>
+
+                <!-- Anniversary Boost -->
+                <div class="bg-gray-800 rounded-xl p-5 border border-gray-700 hover:border-green-500 transition-all">
+                    <div class="text-3xl mb-3">🎂</div>
+                    <h3 class="font-bold mb-1">Anniversary Boost</h3>
+                    <div class="text-green-400 font-bold mb-2">10 USDC</div>
+                    <p class="text-gray-400 text-xs">+1 week bonus to your tier timer</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- How Compatibility Affects Earnings -->
+        <div class="bg-gradient-to-r from-gray-800 to-gray-900 rounded-2xl p-8 border border-gray-700">
+            <h2 class="text-2xl font-bold mb-6 text-center">📈 How Compatibility Affects Your Earnings</h2>
+            
+            <div class="grid md:grid-cols-5 gap-4 mb-6">
+                <div class="text-center p-4 rounded-xl bg-gray-700/50">
+                    <div class="text-gray-400 text-sm mb-1">Below 60%</div>
+                    <div class="text-2xl font-bold text-red-400">0.8x</div>
+                    <div class="text-xs text-gray-500">Penalty</div>
+                </div>
+                <div class="text-center p-4 rounded-xl bg-gray-700/50">
+                    <div class="text-gray-400 text-sm mb-1">60-69%</div>
+                    <div class="text-2xl font-bold text-gray-300">1.0x</div>
+                    <div class="text-xs text-gray-500">Base</div>
+                </div>
+                <div class="text-center p-4 rounded-xl bg-gray-700/50">
+                    <div class="text-gray-400 text-sm mb-1">70-79%</div>
+                    <div class="text-2xl font-bold text-yellow-400">1.2x</div>
+                    <div class="text-xs text-gray-500">Good</div>
+                </div>
+                <div class="text-center p-4 rounded-xl bg-gray-700/50">
+                    <div class="text-gray-400 text-sm mb-1">80-89%</div>
+                    <div class="text-2xl font-bold text-green-400">1.5x</div>
+                    <div class="text-xs text-gray-500">Great</div>
+                </div>
+                <div class="text-center p-4 rounded-xl bg-gradient-to-br from-pink-600 to-purple-600 border-2 border-pink-400">
+                    <div class="text-pink-200 text-sm mb-1">90-100%</div>
+                    <div class="text-2xl font-bold text-white">2.0x</div>
+                    <div class="text-xs text-pink-200">Soulmate! 🔥</div>
+                </div>
+            </div>
+
+            <div class="text-center text-gray-400">
+                <p>Example: At <span class="text-green-400 font-bold">85% compatibility</span> with <span class="text-yellow-400 font-bold">Gold tier (2.5x)</span>, you earn:</p>
+                <p class="text-2xl font-bold text-white mt-2">$55.96 ÷ 20 pairs × 2.5 × 1.5 = <span class="text-green-400">$10.49/day</span></p>
+                <p class="text-sm mt-2">Boost to 90%+ and that becomes <span class="text-pink-400 font-bold">$13.99/day</span>! 🔥</p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 border-t border-gray-700 py-8 px-4 mt-12">
+        <div class="max-w-6xl mx-auto text-center text-gray-400">
+            <p class="mb-2">☀️ <strong class="text-white">SOLBonds</strong> - Find Your SOLmate</p>
+            <p class="text-sm">All boost purchases go directly to the reward pool 💕</p>
+        </div>
+    </footer>
+
+</body>
+</html>
