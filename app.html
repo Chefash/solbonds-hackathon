@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOLBonds App</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Solana Web3.js -->
+    <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.min.js"></script>
+    <style>
+        .hidden { display: none !important; }
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .gradient-bg {
+            background: linear-gradient(-45deg, #f59e0b, #ec4899, #8b5cf6, #3b82f6);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+        }
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(236, 72, 153, 0.5); }
+            50% { box-shadow: 0 0 40px rgba(236, 72, 153, 0.8); }
+        }
+        .pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        .float { animation: float 3s ease-in-out infinite; }
+        .card-hover { transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
+    </style>
+</head>
+<body class="bg-gray-900 text-white min-h-screen">
+    
+    <!-- Nav -->
+    <nav class="bg-gray-800 border-b border-gray-700 px-6 py-4">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <a href="index.html" class="flex items-center gap-2">
+                <img src="logo2.png" alt="SOLBonds" class="h-10 rounded-lg">
+            </a>
+            <div class="flex items-center gap-4">
+                <!-- SOL Balance Display -->
+                <div id="balanceDisplay" class="hidden bg-gray-700 px-4 py-2 rounded-lg text-sm">
+                    <span class="text-gray-400">Balance:</span>
+                    <span id="solBalance" class="text-green-400 font-bold ml-1">0.00 SOL</span>
+                </div>
+                <!-- Connect Wallet Button -->
+                <button id="walletBtn" class="bg-purple-600 hover:bg-purple-700 px-6 py-2 rounded-full font-bold transition-all">
+                    🔗 Connect Wallet
+                </button>
+                <!-- Connected State -->
+                <div id="walletInfo" class="hidden flex items-center gap-3">
+                    <div class="bg-green-600/20 border border-green-500 px-4 py-2 rounded-full">
+                        <span class="text-green-400" id="walletAddress">Connected</span>
+                    </div>
+                    <button id="disconnectBtn" class="text-gray-400 hover:text-red-400 text-sm">
+                        Disconnect
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-7xl mx-auto px-4 py-8">
+        
+        <!-- Welcome Screen (Not Connected) -->
+        <div id="screen-welcome">
+            <div class="text-center py-20">
+                <div class="gradient-bg rounded-3xl p-12 mb-8">
+                    <div class="text-6xl mb-6 float">💕</div>
+                    <h1 class="text-5xl font-bold mb-6">Welcome to SOLBonds</h1>
+                    <p class="text-2xl mb-8 text-gray-200">Connect your wallet to find your SOLmate</p>
+                    <button id="connectBtn" class="bg-white text-purple-600 font-bold py-4 px-12 rounded-full text-xl hover:scale-105 transition-transform pulse-glow">
+                        🔗 Connect Phantom Wallet
+                    </button>
+                    <p class="text-sm text-gray-300 mt-4">Don't have Phantom? <a href="https://phantom.app" target="_blank" class="text-purple-300 underline">Download here</a></p>
+                </div>
+                
+                <!-- Network Info -->
+                <div class="bg-yellow-500/10 border border-yellow-500/30 rounded-xl p-4 max-w-md mx-auto">
+                    <p class="text-yellow-400 text-sm">⚠️ Running on <strong>Solana Devnet</strong> - No real funds needed!</p>
+                    <p class="text-gray-400 text-xs mt-1">Get free devnet SOL at <a href="https://faucet.solana.com" target="_blank" class="underline">faucet.solana.com</a></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile Screen (Connected, No Profile) -->
+        <div id="screen-profile" class="hidden">
+            <div class="max-w-2xl mx-auto">
+                <h2 class="text-4xl font-bold mb-2 text-center">Create Your Profile</h2>
+                <p class="text-center text-gray-400 mb-8">Mint your dating NFT on Solana</p>
+                
+                <div class="bg-gray-800 rounded-2xl p-8 space-y-6 card-hover">
+                    <div>
+                        <label class="block text-lg font-bold mb-2">Username</label>
+                        <input type="text" id="username" placeholder="Enter username" maxlength="20"
+                            class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white focus:border-purple-500 focus:outline-none transition-all">
+                    </div>
+
+                    <div>
+                        <label class="block text-lg font-bold mb-2">Gender</label>
+                        <div class="grid grid-cols-2 gap-4">
+                            <button class="gender-btn bg-gray-700 border-2 border-gray-600 rounded-lg p-4 hover:border-purple-400 transition-all" data-value="0">
+                                <div class="text-4xl mb-2">♂️</div>
+                                <div>Masculine</div>
+                            </button>
+                            <button class="gender-btn bg-gray-700 border-2 border-gray-600 rounded-lg p-4 hover:border-purple-400 transition-all" data-value="1">
+                                <div class="text-4xl mb-2">♀️</div>
+                                <div>Feminine</div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-lg font-bold mb-2">Zodiac Sign</label>
+                        <select id="zodiac" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white focus:border-purple-500 focus:outline-none">
+                            <option value="">Select your sign...</option>
+                            <option value="1">♈ Aries (Fire)</option>
+                            <option value="2">♉ Taurus (Earth)</option>
+                            <option value="3">♊ Gemini (Air)</option>
+                            <option value="4">♋ Cancer (Water)</option>
+                            <option value="5">♌ Leo (Fire)</option>
+                            <option value="6">♍ Virgo (Earth)</option>
+                            <option value="7">♎ Libra (Air)</option>
+                            <option value="8">♏ Scorpio (Water)</option>
+                            <option value="9">♐ Sagittarius (Fire)</option>
+                            <option value="10">♑ Capricorn (Earth)</option>
+                            <option value="11">♒ Aquarius (Air)</option>
+                            <option value="12">♓ Pisces (Water)</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-lg font-bold mb-2">Pet Preference</label>
+                        <div class="grid grid-cols-3 gap-4">
+                            <button class="pet-btn bg-gray-700 border-2 border-gray-600 rounded-lg p-4 hover:border-purple-400 transition-all" data-value="0">
+                                <div class="text-4xl mb-2">🐕</div>
+                                <div>Dog</div>
+                            </button>
+                            <button class="pet-btn bg-gray-700 border-2 border-gray-600 rounded-lg p-4 hover:border-purple-400 transition-all" data-value="1">
+                                <div class="text-4xl mb-2">🐈</div>
+                                <div>Cat</div>
+                            </button>
+                            <button class="pet-btn bg-gray-700 border-2 border-gray-600 rounded-lg p-4 hover:border-purple-400 transition-all" data-value="2">
+                                <div class="text-4xl mb-2">🦎</div>
+                                <div>Other</div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-lg font-bold mb-2">Risk Tolerance: <span id="riskValue" class="text-purple-400">5</span>/10</label>
+                        <input type="range" id="risk" min="1" max="10" value="5" 
+                            class="w-full h-3 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-purple-500">
+                        <div class="flex justify-between text-xs text-gray-500 mt-1">
+                            <span>Conservative</span>
+                            <span>Degen</span>
+                        </div>
+                    </div>
+
+                    <!-- Cost Breakdown -->
+                    <div class="bg-gray-900 rounded-xl p-4 border border-gray-700">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-gray-400">Profile Mint Cost</span>
+                            <span class="font-bold">0.01 SOL</span>
+                        </div>
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-gray-400">Network Fee (est.)</span>
+                            <span class="font-bold">~0.00001 SOL</span>
+                        </div>
+                        <div class="border-t border-gray-700 pt-2 mt-2 flex justify-between items-center">
+                            <span class="font-bold">Total</span>
+                            <span class="font-bold text-green-400">~0.01 SOL</span>
+                        </div>
+                    </div>
+
+                    <button id="createBtn" class="w-full bg-gradient-to-r from-pink-600 to-purple-600 font-bold py-4 rounded-lg text-xl hover:opacity-90 transition-opacity pulse-glow">
+                        ✨ Mint Profile (0.01 SOL)
+                    </button>
+                    
+                    <p class="text-center text-gray-500 text-sm">
+                        This will send a real transaction on Solana Devnet
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Match Screen -->
+        <div id="screen-match" class="hidden">
+            <h2 class="text-4xl font-bold mb-8 text-center">💕 Your Match</h2>
+            
+            <div class="bg-gradient-to-br from-pink-600 to-purple-600 rounded-2xl p-8 mb-8 text-center">
+                <div class="text-sm text-pink-200 mb-2">Compatibility Score</div>
+                <div class="text-7xl font-bold mb-4" id="compatScore">85%</div>
+                <div id="compatTier" class="text-2xl mb-6 text-yellow-300">💕 Great Match!</div>
+                <div id="breakdown" class="grid grid-cols-4 gap-4 max-w-3xl mx-auto text-sm"></div>
+            </div>
+            
+            <!-- Match Profile Card -->
+            <div class="bg-gray-800 rounded-2xl p-6 mb-8 max-w-md mx-auto">
+                <div class="text-center">
+                    <div class="text-6xl mb-4">👤</div>
+                    <h3 class="text-2xl font-bold" id="matchName">CryptoLover42</h3>
+                    <p class="text-gray-400" id="matchTraits">♌ Leo • 🐕 Dog Person • Risk: 7/10</p>
+                    <p class="text-xs text-gray-500 mt-2" id="matchWallet">7xK9...3mNp</p>
+                </div>
+            </div>
+
+            <div class="flex gap-4 justify-center">
+                <button id="rejectBtn" class="bg-gray-700 hover:bg-gray-600 font-bold py-4 px-8 rounded-full transition-all">
+                    ❌ Pass
+                </button>
+                <button id="acceptBtn" class="bg-green-600 hover:bg-green-500 font-bold py-4 px-8 rounded-full transition-all pulse-glow">
+                    ✅ Create Bond (0.005 SOL)
+                </button>
+            </div>
+        </div>
+
+        <!-- Bond Screen -->
+        <div id="screen-bond" class="hidden">
+            <h2 class="text-4xl font-bold mb-8 text-center">💕 Your Active Bond</h2>
+            
+            <!-- Bond Card -->
+            <div class="bg-gradient-to-br from-pink-900/50 to-purple-900/50 border-2 border-pink-500 rounded-2xl p-8 mb-8 max-w-2xl mx-auto">
+                <div class="flex justify-between items-center mb-6">
+                    <div class="text-center">
+                        <div class="text-4xl mb-2">💕</div>
+                        <div class="font-bold" id="bondUser1">You</div>
+                    </div>
+                    <div class="text-4xl">🔗</div>
+                    <div class="text-center">
+                        <div class="text-4xl mb-2">💕</div>
+                        <div class="font-bold" id="bondUser2">Partner</div>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-3 gap-4 text-center mb-6">
+                    <div class="bg-gray-800/50 rounded-lg p-4">
+                        <div class="text-gray-400 text-sm">Days Bonded</div>
+                        <div class="text-3xl font-bold text-white" id="daysBonded">0</div>
+                    </div>
+                    <div class="bg-gray-800/50 rounded-lg p-4">
+                        <div class="text-gray-400 text-sm">Compatibility</div>
+                        <div class="text-3xl font-bold text-pink-400" id="bondCompat">85%</div>
+                    </div>
+                    <div class="bg-gray-800/50 rounded-lg p-4">
+                        <div class="text-gray-400 text-sm">Current Tier</div>
+                        <div class="text-3xl font-bold text-yellow-400" id="bondTier">🥉</div>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-800 rounded-xl p-4">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-gray-400">Tier Multiplier</span>
+                        <span class="font-bold text-yellow-400" id="tierMult">1.0x</span>
+                    </div>
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-gray-400">Compatibility Bonus</span>
+                        <span class="font-bold text-pink-400" id="compatMult">1.5x</span>
+                    </div>
+                    <div class="border-t border-gray-700 pt-2 mt-2 flex justify-between items-center">
+                        <span class="font-bold">Combined Multiplier</span>
+                        <span class="font-bold text-green-400 text-xl" id="totalMult">1.5x</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Earnings Card -->
+            <div class="bg-gray-800 rounded-2xl p-8 max-w-2xl mx-auto mb-8">
+                <h3 class="text-2xl font-bold mb-6 text-center text-green-400">💰 Earnings</h3>
+                <div class="grid grid-cols-2 gap-6">
+                    <div class="text-center">
+                        <div class="text-gray-400 mb-1">Estimated Daily</div>
+                        <div class="text-3xl font-bold text-green-400" id="dailyRate">$2.80</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-gray-400 mb-1">Total Earned</div>
+                        <div class="text-3xl font-bold text-yellow-400" id="totalEarned">$0.00</div>
+                    </div>
+                </div>
+                <button id="claimBtn" class="w-full bg-green-600 hover:bg-green-500 font-bold py-4 rounded-lg mt-6 transition-all">
+                    💰 Claim Rewards
+                </button>
+            </div>
+            
+            <!-- Actions -->
+            <div class="text-center">
+                <button id="breakupBtn" class="text-red-400 hover:text-red-300 text-sm transition-all">
+                    💔 Break Bond (0.005 SOL penalty)
+                </button>
+            </div>
+        </div>
+
+        <!-- Transaction Status -->
+        <div id="txStatus" class="hidden fixed bottom-8 left-1/2 transform -translate-x-1/2 bg-gray-800 border border-gray-600 rounded-xl px-6 py-4 shadow-2xl z-50">
+            <div class="flex items-center gap-3">
+                <div id="txSpinner" class="animate-spin w-5 h-5 border-2 border-purple-500 border-t-transparent rounded-full"></div>
+                <span id="txMessage">Processing transaction...</span>
+            </div>
+            <a id="txLink" href="#" target="_blank" class="hidden text-purple-400 text-sm mt-2 block hover:underline">View on Solana Explorer →</a>
+        </div>
+
+    </div>
+
+    <script>
+        // ============================================
+        // SOLANA CONFIGURATION
+        // ============================================
+        const SOLANA_NETWORK = 'devnet';
+        const SOLANA_RPC = 'https://api.devnet.solana.com';
+        const EXPLORER_URL = 'https://explorer.solana.com';
+        
+        // Costs in SOL (devnet)
+        const MINT_COST = 0.01;
+        const BOND_COST = 0.005;
+        const BREAKUP_COST = 0.005;
+        
+        // Treasury wallet (receives fees) - replace with your own!
+        const TREASURY_WALLET = 'DfMxre4cKmvogbLrPigxmibVTTQDuzjdXojWzjCXXhzj';
+
+        // ============================================
+        // STATE
+        // ============================================
+        let state = {
+            connected: false,
+            wallet: null,
+            publicKey: null,
+            balance: 0,
+            profile: null,
+            bonded: false,
+            bondData: null,
+            selectedGender: null,
+            selectedPet: null
+        };
+
+        // ============================================
+        // DOM ELEMENTS
+        // ============================================
+        const screens = {
+            welcome: document.getElementById('screen-welcome'),
+            profile: document.getElementById('screen-profile'),
+            match: document.getElementById('screen-match'),
+            bond: document.getElementById('screen-bond')
+        };
+
+        // ============================================
+        // UTILITY FUNCTIONS
+        // ============================================
+        function showScreen(name) {
+            Object.values(screens).forEach(s => s.classList.add('hidden'));
+            screens[name].classList.remove('hidden');
+        }
+
+        function showTxStatus(message, showSpinner = true) {
+            document.getElementById('txStatus').classList.remove('hidden');
+            document.getElementById('txMessage').textContent = message;
+            document.getElementById('txSpinner').classList.toggle('hidden', !showSpinner);
+            document.getElementById('txLink').classList.add('hidden');
+        }
+
+        function hideTxStatus() {
+            document.getElementById('txStatus').classList.add('hidden');
+        }
+
+        function showTxSuccess(signature) {
+            document.getElementById('txSpinner').classList.add('hidden');
+            document.getElementById('txMessage').textContent = '✅ Transaction confirmed!';
+            const link = document.getElementById('txLink');
+            link.href = `${EXPLORER_URL}/tx/${signature}?cluster=${SOLANA_NETWORK}`;
+            link.classList.remove('hidden');
+            setTimeout(hideTxStatus, 5000);
+        }
+
+        function showTxError(error) {
+            document.getElementById('txSpinner').classList.add('hidden');
+            document.getElementById('txMessage').textContent = '❌ ' + error;
+            setTimeout(hideTxStatus, 4000);
+        }
+
+        function shortenAddress(address) {
+            return address.slice(0, 4) + '...' + address.slice(-4);
+        }
+
+        async function updateBalance() {
+            if (!state.publicKey) return;
+            try {
+                const connection = new solanaWeb3.Connection(SOLANA_RPC);
+                const balance = await connection.getBalance(state.publicKey);
+                state.balance = balance / solanaWeb3.LAMPORTS_PER_SOL;
+                document.getElementById('solBalance').textContent = state.balance.toFixed(4) + ' SOL';
+            } catch (e) {
+                console.error('Failed to get balance:', e);
+            }
+        }
+
+        // ============================================
+        // WALLET CONNECTION
+        // ============================================
+        async function connectWallet() {
+            try {
+                // Check if Phantom is installed
+                const { solana } = window;
+                
+                if (!solana || !solana.isPhantom) {
+                    alert('Phantom wallet not found! Please install it from phantom.app');
+                    window.open('https://phantom.app', '_blank');
+                    return;
+                }
+
+                showTxStatus('Connecting to Phantom...', true);
+
+                // Connect
+                const response = await solana.connect();
+                state.wallet = solana;
+                state.publicKey = response.publicKey;
+                state.connected = true;
+
+                // Update UI
+                document.getElementById('walletBtn').classList.add('hidden');
+                document.getElementById('walletInfo').classList.remove('hidden');
+                document.getElementById('balanceDisplay').classList.remove('hidden');
+                document.getElementById('walletAddress').textContent = shortenAddress(response.publicKey.toString());
+
+                // Get balance
+                await updateBalance();
+
+                hideTxStatus();
+
+                // Check if user has profile (for demo, check localStorage)
+                const savedProfile = localStorage.getItem('solbonds_profile_' + state.publicKey.toString());
+                if (savedProfile) {
+                    state.profile = JSON.parse(savedProfile);
+                    const savedBond = localStorage.getItem('solbonds_bond_' + state.publicKey.toString());
+                    if (savedBond) {
+                        state.bondData = JSON.parse(savedBond);
+                        state.bonded = true;
+                        showBondScreen();
+                    } else {
+                        showMatchScreen();
+                    }
+                } else {
+                    showScreen('profile');
+                }
+
+                console.log('✅ Connected:', response.publicKey.toString());
+
+            } catch (error) {
+                console.error('Connection error:', error);
+                showTxError('Failed to connect wallet');
+            }
+        }
+
+        function disconnectWallet() {
+            if (state.wallet) {
+                state.wallet.disconnect();
+            }
+            state.connected = false;
+            state.wallet = null;
+            state.publicKey = null;
+            state.balance = 0;
+            state.profile = null;
+            
+            document.getElementById('walletBtn').classList.remove('hidden');
+            document.getElementById('walletInfo').classList.add('hidden');
+            document.getElementById('balanceDisplay').classList.add('hidden');
+            
+            showScreen('welcome');
+        }
+
+        // ============================================
+        // SOLANA TRANSACTIONS
+        // ============================================
+        async function sendPayment(amount, memo) {
+            if (!state.wallet || !state.publicKey) {
+                throw new Error('Wallet not connected');
+            }
+
+            const connection = new solanaWeb3.Connection(SOLANA_RPC, 'confirmed');
+            
+            // Create transaction
+            const transaction = new solanaWeb3.Transaction();
+            
+            // Add transfer instruction
+            const transferInstruction = solanaWeb3.SystemProgram.transfer({
+                fromPubkey: state.publicKey,
+                toPubkey: new solanaWeb3.PublicKey(TREASURY_WALLET),
+                lamports: amount * solanaWeb3.LAMPORTS_PER_SOL
+            });
+            
+            transaction.add(transferInstruction);
+            
+            // Add memo if provided (requires memo program)
+            // For simplicity, we'll skip the memo for now
+            
+            // Get recent blockhash
+            const { blockhash } = await connection.getLatestBlockhash();
+            transaction.recentBlockhash = blockhash;
+            transaction.feePayer = state.publicKey;
+
+            // Sign and send
+            const signed = await state.wallet.signTransaction(transaction);
+            const signature = await connection.sendRawTransaction(signed.serialize());
+            
+            // Confirm
+            await connection.confirmTransaction(signature, 'confirmed');
+            
+            return signature;
+        }
+
+        // ============================================
+        // PROFILE CREATION
+        // ============================================
+        async function createProfile() {
+            const username = document.getElementById('username').value.trim();
+            const zodiac = document.getElementById('zodiac').value;
+            const risk = document.getElementById('risk').value;
+
+            if (!username || !zodiac || state.selectedGender === null || state.selectedPet === null) {
+                alert('Please fill all fields!');
+                return;
+            }
+
+            if (state.balance < MINT_COST) {
+                alert(`Insufficient balance! You need at least ${MINT_COST} SOL. Get free devnet SOL at faucet.solana.com`);
+                return;
+            }
+
+            try {
+                showTxStatus('Creating your profile on Solana...', true);
+
+                // Send payment transaction
+                const signature = await sendPayment(MINT_COST, `SOLBonds:Mint:${username}`);
+                
+                // Save profile locally (in production, this would be on-chain)
+                state.profile = {
+                    username,
+                    gender: state.selectedGender,
+                    zodiac: parseInt(zodiac),
+                    pet: state.selectedPet,
+                    risk: parseInt(risk),
+                    wallet: state.publicKey.toString(),
+                    createdAt: Date.now(),
+                    txSignature: signature
+                };
+
+                // Store in localStorage (for demo persistence)
+                localStorage.setItem('solbonds_profile_' + state.publicKey.toString(), JSON.stringify(state.profile));
+
+                showTxSuccess(signature);
+                await updateBalance();
+
+                // Show match screen
+                setTimeout(() => {
+                    showMatchScreen();
+                }, 2000);
+
+            } catch (error) {
+                console.error('Profile creation error:', error);
+                showTxError(error.message || 'Transaction failed');
+            }
+        }
+
+        // ============================================
+        // MATCHING
+        // ============================================
+        function generateMatch() {
+            // Generate a random match profile
+            const names = ['CryptoQueen', 'DeFiKing', 'NFTLover', 'SolanaMaxi', 'YieldFarmer', 'DiamondHands', 'MoonShot', 'HODLer'];
+            const randomName = names[Math.floor(Math.random() * names.length)] + Math.floor(Math.random() * 100);
+            
+            return {
+                username: randomName,
+                gender: Math.floor(Math.random() * 2),
+                zodiac: Math.floor(Math.random() * 12) + 1,
+                pet: Math.floor(Math.random() * 3),
+                risk: Math.floor(Math.random() * 10) + 1,
+                wallet: 'Demo' + Math.random().toString(36).substring(2, 10)
+            };
+        }
+
+        function calculateCompatibility(profile1, profile2) {
+            let score = 0;
+            
+            // Gender (20 pts)
+            if (profile1.gender !== profile2.gender) {
+                score += 20;
+            } else {
+                score += 15;
+            }
+            
+            // Zodiac element compatibility (30 pts)
+            const getElement = (z) => Math.floor((z - 1) / 3); // 0=Fire, 1=Earth, 2=Air, 3=Water
+            if (getElement(profile1.zodiac) === getElement(profile2.zodiac)) {
+                score += 30;
+            } else {
+                score += 15;
+            }
+            
+            // Pet (25 pts)
+            if (profile1.pet === profile2.pet) {
+                score += 25;
+            } else if (profile1.pet === 2 || profile2.pet === 2) {
+                score += 15;
+            }
+            
+            // Risk tolerance (25 pts)
+            const riskDiff = Math.abs(profile1.risk - profile2.risk);
+            if (riskDiff <= 2) {
+                score += 25;
+            } else if (riskDiff <= 5) {
+                score += 12;
+            } else {
+                score += 5;
+            }
+            
+            return Math.min(100, score);
+        }
+
+        function getCompatTier(score) {
+            if (score >= 90) return { name: '🔥 Soulmates!', mult: 2.0 };
+            if (score >= 80) return { name: '💕 Great Match!', mult: 1.5 };
+            if (score >= 70) return { name: '💛 Good Match', mult: 1.2 };
+            if (score >= 60) return { name: '⚡ Compatible', mult: 1.0 };
+            return { name: '😅 Challenging', mult: 0.8 };
+        }
+
+        function showMatchScreen() {
+            state.currentMatch = generateMatch();
+            const compat = calculateCompatibility(state.profile, state.currentMatch);
+            const tier = getCompatTier(compat);
+            
+            document.getElementById('compatScore').textContent = compat + '%';
+            document.getElementById('compatTier').textContent = tier.name;
+            document.getElementById('matchName').textContent = state.currentMatch.username;
+            
+            const zodiacSigns = ['', '♈', '♉', '♊', '♋', '♌', '♍', '♎', '♏', '♐', '♑', '♒', '♓'];
+            const petEmoji = ['🐕', '🐈', '🦎'][state.currentMatch.pet];
+            document.getElementById('matchTraits').textContent = 
+                `${zodiacSigns[state.currentMatch.zodiac]} • ${petEmoji} • Risk: ${state.currentMatch.risk}/10`;
+            document.getElementById('matchWallet').textContent = state.currentMatch.wallet;
+            
+            // Breakdown
+            document.getElementById('breakdown').innerHTML = `
+                <div class="bg-white/20 rounded-lg p-3">
+                    <div class="font-bold">Gender</div>
+                    <div>${state.profile.gender !== state.currentMatch.gender ? '20' : '15'}/20</div>
+                </div>
+                <div class="bg-white/20 rounded-lg p-3">
+                    <div class="font-bold">Zodiac</div>
+                    <div>${Math.floor((state.profile.zodiac-1)/3) === Math.floor((state.currentMatch.zodiac-1)/3) ? '30' : '15'}/30</div>
+                </div>
+                <div class="bg-white/20 rounded-lg p-3">
+                    <div class="font-bold">Pet</div>
+                    <div>${state.profile.pet === state.currentMatch.pet ? '25' : (state.profile.pet === 2 || state.currentMatch.pet === 2 ? '15' : '0')}/25</div>
+                </div>
+                <div class="bg-white/20 rounded-lg p-3">
+                    <div class="font-bold">Risk</div>
+                    <div>${Math.abs(state.profile.risk - state.currentMatch.risk) <= 2 ? '25' : (Math.abs(state.profile.risk - state.currentMatch.risk) <= 5 ? '12' : '5')}/25</div>
+                </div>
+            `;
+            
+            state.currentCompatibility = compat;
+            showScreen('match');
+        }
+
+        // ============================================
+        // BONDING
+        // ============================================
+        async function createBond() {
+            if (state.balance < BOND_COST) {
+                alert(`Insufficient balance! You need at least ${BOND_COST} SOL.`);
+                return;
+            }
+
+            try {
+                showTxStatus('Creating bond on Solana...', true);
+
+                const signature = await sendPayment(BOND_COST, 'SOLBonds:Bond');
+                
+                state.bondData = {
+                    partner: state.currentMatch,
+                    compatibility: state.currentCompatibility,
+                    startTime: Date.now(),
+                    txSignature: signature
+                };
+                state.bonded = true;
+
+                localStorage.setItem('solbonds_bond_' + state.publicKey.toString(), JSON.stringify(state.bondData));
+
+                showTxSuccess(signature);
+                await updateBalance();
+
+                setTimeout(() => {
+                    showBondScreen();
+                }, 2000);
+
+            } catch (error) {
+                console.error('Bond creation error:', error);
+                showTxError(error.message || 'Transaction failed');
+            }
+        }
+
+        function showBondScreen() {
+            const bond = state.bondData;
+            const daysBonded = Math.floor((Date.now() - bond.startTime) / (1000 * 60 * 60 * 24));
+            
+            // Tier calculation
+            let tierEmoji = '🥉';
+            let tierMult = 1.0;
+            if (daysBonded >= 181) { tierEmoji = '👑'; tierMult = 6.0; }
+            else if (daysBonded >= 91) { tierEmoji = '💎'; tierMult = 4.0; }
+            else if (daysBonded >= 31) { tierEmoji = '🥇'; tierMult = 2.5; }
+            else if (daysBonded >= 8) { tierEmoji = '🥈'; tierMult = 1.5; }
+            
+            const compatMult = getCompatTier(bond.compatibility).mult;
+            const totalMult = tierMult * compatMult;
+            
+            // Daily earnings (simplified calculation)
+            const baseDaily = 55.96 / 50; // $55.96 daily pool / 50 pairs
+            const dailyEarnings = baseDaily * totalMult;
+            const totalEarnings = dailyEarnings * Math.max(1, daysBonded);
+
+            document.getElementById('bondUser1').textContent = state.profile.username;
+            document.getElementById('bondUser2').textContent = bond.partner.username;
+            document.getElementById('daysBonded').textContent = daysBonded;
+            document.getElementById('bondCompat').textContent = bond.compatibility + '%';
+            document.getElementById('bondTier').textContent = tierEmoji;
+            document.getElementById('tierMult').textContent = tierMult.toFixed(1) + 'x';
+            document.getElementById('compatMult').textContent = compatMult.toFixed(1) + 'x';
+            document.getElementById('totalMult').textContent = totalMult.toFixed(1) + 'x';
+            document.getElementById('dailyRate').textContent = '$' + dailyEarnings.toFixed(2);
+            document.getElementById('totalEarned').textContent = '$' + totalEarnings.toFixed(2);
+
+            showScreen('bond');
+        }
+
+        async function breakBond() {
+            if (!confirm('Are you sure? This will cost ' + BREAKUP_COST + ' SOL and reset your progress! 💔')) {
+                return;
+            }
+
+            try {
+                showTxStatus('Breaking bond...', true);
+
+                const signature = await sendPayment(BREAKUP_COST, 'SOLBonds:Breakup');
+                
+                state.bonded = false;
+                state.bondData = null;
+                localStorage.removeItem('solbonds_bond_' + state.publicKey.toString());
+
+                showTxSuccess(signature);
+                await updateBalance();
+
+                setTimeout(() => {
+                    showMatchScreen();
+                }, 2000);
+
+            } catch (error) {
+                console.error('Breakup error:', error);
+                showTxError(error.message || 'Transaction failed');
+            }
+        }
+
+        // ============================================
+        // EVENT LISTENERS
+        // ============================================
+        document.getElementById('walletBtn').addEventListener('click', connectWallet);
+        document.getElementById('connectBtn').addEventListener('click', connectWallet);
+        document.getElementById('disconnectBtn').addEventListener('click', disconnectWallet);
+        document.getElementById('createBtn').addEventListener('click', createProfile);
+        document.getElementById('acceptBtn').addEventListener('click', createBond);
+        document.getElementById('breakupBtn').addEventListener('click', breakBond);
+        
+        document.getElementById('rejectBtn').addEventListener('click', () => {
+            showMatchScreen(); // Generate new match
+        });
+
+        document.getElementById('claimBtn').addEventListener('click', () => {
+            alert('🎉 Rewards claimed! (Demo - in production this would be a real transaction)');
+        });
+
+        // Gender selection
+        document.querySelectorAll('.gender-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.gender-btn').forEach(b => {
+                    b.classList.remove('border-purple-500', 'bg-purple-600/30');
+                    b.classList.add('border-gray-600', 'bg-gray-700');
+                });
+                this.classList.remove('border-gray-600', 'bg-gray-700');
+                this.classList.add('border-purple-500', 'bg-purple-600/30');
+                state.selectedGender = parseInt(this.dataset.value);
+            });
+        });
+
+        // Pet selection
+        document.querySelectorAll('.pet-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.pet-btn').forEach(b => {
+                    b.classList.remove('border-purple-500', 'bg-purple-600/30');
+                    b.classList.add('border-gray-600', 'bg-gray-700');
+                });
+                this.classList.remove('border-gray-600', 'bg-gray-700');
+                this.classList.add('border-purple-500', 'bg-purple-600/30');
+                state.selectedPet = parseInt(this.dataset.value);
+            });
+        });
+
+        // Risk slider
+        document.getElementById('risk').addEventListener('input', function(e) {
+            document.getElementById('riskValue').textContent = e.target.value;
+        });
+
+        // Auto-connect if previously connected
+        window.addEventListener('load', async () => {
+            if (window.solana && window.solana.isPhantom) {
+                try {
+                    const response = await window.solana.connect({ onlyIfTrusted: true });
+                    if (response.publicKey) {
+                        state.wallet = window.solana;
+                        state.publicKey = response.publicKey;
+                        state.connected = true;
+                        
+                        document.getElementById('walletBtn').classList.add('hidden');
+                        document.getElementById('walletInfo').classList.remove('hidden');
+                        document.getElementById('balanceDisplay').classList.remove('hidden');
+                        document.getElementById('walletAddress').textContent = shortenAddress(response.publicKey.toString());
+                        
+                        await updateBalance();
+                        
+                        const savedProfile = localStorage.getItem('solbonds_profile_' + state.publicKey.toString());
+                        if (savedProfile) {
+                            state.profile = JSON.parse(savedProfile);
+                            const savedBond = localStorage.getItem('solbonds_bond_' + state.publicKey.toString());
+                            if (savedBond) {
+                                state.bondData = JSON.parse(savedBond);
+                                state.bonded = true;
+                                showBondScreen();
+                            } else {
+                                showMatchScreen();
+                            }
+                        } else {
+                            showScreen('profile');
+                        }
+                    }
+                } catch (e) {
+                    console.log('Auto-connect skipped');
+                }
+            }
+        });
+
+        console.log('✅ SOLBonds App loaded - Solana integration active!');
+    </script>
+</body>
+</html>
