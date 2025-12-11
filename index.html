@@ -3,1241 +3,471 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SOLBonds - NFT Matchmaking with Real Yield</title>
+    <title>☀️ SOLBonds - NFT Matchmaking with Real Yield</title>
     <link rel="icon" type="image/png" href="favicon.png">
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        'outfit': ['Outfit', 'sans-serif'],
-                        'playfair': ['Playfair Display', 'serif'],
-                    },
-                    colors: {
-                        'sol-pink': '#ec4899',
-                        'sol-purple': '#a855f7',
-                        'sol-violet': '#8b5cf6',
-                        'sol-cyan': '#22d3d3',
-                        'sol-dark': '#0f0a1a',
-                        'sol-darker': '#060410',
-                    }
-                }
-            }
-        }
-    </script>
     <style>
-        * { font-family: 'Outfit', sans-serif; }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        .float { animation: float 3s ease-in-out infinite; }
         
-        .hidden { display: none !important; }
-        
-        /* Animated gradient background */
-        @keyframes gradient-shift {
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(236, 72, 153, 0.5); }
+            50% { box-shadow: 0 0 40px rgba(236, 72, 153, 0.8); }
+        }
+        .pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
+
+        @keyframes gradient {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
-        
         .gradient-animate {
-            background: linear-gradient(-45deg, #ec4899, #a855f7, #8b5cf6, #22d3d3, #ec4899);
+            background: linear-gradient(-45deg, #f59e0b, #ec4899, #8b5cf6, #3b82f6);
             background-size: 400% 400%;
-            animation: gradient-shift 12s ease infinite;
+            animation: gradient 15s ease infinite;
         }
         
-        /* Floating animation */
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-15px) rotate(2deg); }
-        }
-        .float { animation: float 4s ease-in-out infinite; }
-        .float-delay-1 { animation-delay: 0.5s; }
-        .float-delay-2 { animation-delay: 1s; }
-        .float-delay-3 { animation-delay: 1.5s; }
-        
-        /* Pulse glow */
-        @keyframes pulse-glow {
-            0%, 100% { 
-                box-shadow: 0 0 20px rgba(236, 72, 153, 0.4), 0 0 40px rgba(168, 85, 247, 0.2);
-            }
-            50% { 
-                box-shadow: 0 0 40px rgba(236, 72, 153, 0.6), 0 0 80px rgba(168, 85, 247, 0.4);
-            }
-        }
-        .pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
-        
-        /* Heart beat */
-        @keyframes heartbeat {
-            0%, 100% { transform: scale(1); }
-            14% { transform: scale(1.1); }
-            28% { transform: scale(1); }
-            42% { transform: scale(1.1); }
-            70% { transform: scale(1); }
-        }
-        .heartbeat { animation: heartbeat 1.5s ease-in-out infinite; }
-        
-        /* Sparkle effect */
         @keyframes sparkle {
-            0%, 100% { opacity: 0; transform: scale(0); }
-            50% { opacity: 1; transform: scale(1); }
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.2); }
         }
-        
-        /* Glass morphism */
-        .glass {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .glass-dark {
-            background: rgba(15, 10, 26, 0.8);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-        }
-        
-        /* Custom scrollbar */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #0f0a1a; }
-        ::-webkit-scrollbar-thumb { 
-            background: linear-gradient(180deg, #ec4899, #a855f7);
-            border-radius: 4px;
-        }
-        
-        /* Noise texture overlay */
-        .noise::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-            opacity: 0.03;
-            pointer-events: none;
-        }
-        
-        /* Glowing text */
-        .glow-text {
-            text-shadow: 0 0 20px rgba(236, 72, 153, 0.5), 0 0 40px rgba(168, 85, 247, 0.3);
-        }
-        
-        /* Button hover effects */
-        .btn-primary {
-            background: linear-gradient(135deg, #ec4899, #a855f7);
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-        .btn-primary::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: left 0.5s ease;
-        }
-        .btn-primary:hover::before {
-            left: 100%;
-        }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 40px rgba(236, 72, 153, 0.4);
-        }
-        
-        /* Card hover */
-        .card-hover {
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        .card-hover:hover {
-            transform: translateY(-8px) scale(1.02);
-        }
-        
-        /* Tab underline animation */
-        .tab-active {
-            position: relative;
-        }
-        .tab-active::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 0;
-            width: 100%;
-            height: 3px;
-            background: linear-gradient(90deg, #ec4899, #a855f7);
-            border-radius: 2px;
-        }
-        
-        /* Range slider styling */
-        input[type="range"] {
-            -webkit-appearance: none;
-            background: transparent;
-        }
-        input[type="range"]::-webkit-slider-track {
-            height: 8px;
-            background: linear-gradient(90deg, #1f1535, #2d1f4a);
-            border-radius: 4px;
-        }
-        input[type="range"]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            width: 24px;
-            height: 24px;
-            background: linear-gradient(135deg, #ec4899, #a855f7);
-            border-radius: 50%;
-            cursor: pointer;
-            box-shadow: 0 0 20px rgba(236, 72, 153, 0.5);
-            margin-top: -8px;
-        }
-        
-        /* Selection styling */
-        .select-btn.selected {
-            background: linear-gradient(135deg, rgba(236, 72, 153, 0.3), rgba(168, 85, 247, 0.3));
-            border-color: #ec4899;
-        }
-        
-        /* Compatibility meter */
-        .compat-meter {
-            background: conic-gradient(from 180deg, #ec4899, #a855f7, #8b5cf6, #22d3d3, #ec4899);
-            border-radius: 50%;
-        }
-        
-        /* Tier cards */
-        .tier-bronze { background: linear-gradient(135deg, #cd7f32, #8b4513); }
-        .tier-silver { background: linear-gradient(135deg, #c0c0c0, #808080); }
-        .tier-gold { background: linear-gradient(135deg, #ffd700, #daa520); }
-        .tier-diamond { background: linear-gradient(135deg, #b9f2ff, #00bfff); }
-        .tier-legendary { 
-            background: linear-gradient(135deg, #ec4899, #a855f7, #8b5cf6);
-            animation: gradient-shift 3s ease infinite;
-            background-size: 200% 200%;
-        }
+        .sparkle { animation: sparkle 2s ease-in-out infinite; }
     </style>
 </head>
-<body class="bg-sol-darker text-white min-h-screen overflow-x-hidden">
+<body class="bg-gray-900 text-white overflow-x-hidden">
     
-    <!-- Ambient background -->
-    <div class="fixed inset-0 pointer-events-none">
-        <div class="absolute top-0 left-1/4 w-96 h-96 bg-sol-pink/20 rounded-full blur-[150px]"></div>
-        <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-sol-purple/20 rounded-full blur-[150px]"></div>
-        <div class="absolute top-1/2 left-1/2 w-64 h-64 bg-sol-cyan/10 rounded-full blur-[100px]"></div>
-    </div>
-    
-    <!-- Navigation -->
-    <nav class="fixed top-0 left-0 right-0 z-50 glass-dark">
-        <div class="max-w-7xl mx-auto px-6 py-4">
-            <div class="flex justify-between items-center">
-                <!-- Logo -->
-                <div class="flex items-center gap-3 cursor-pointer" onclick="showScreen('home')">
-                    <img src="logo2.png" alt="SOLBonds" class="h-12 rounded-xl">
-                </div>
-                
-                <!-- Nav Tabs -->
-                <div class="hidden md:flex items-center gap-1 bg-sol-dark/50 rounded-full p-1">
-                    <button onclick="showScreen('home')" class="nav-tab px-5 py-2 rounded-full text-sm font-medium transition-all hover:bg-white/10" data-screen="home">
-                        Home
-                    </button>
-                    <button onclick="showScreen('app')" class="nav-tab px-5 py-2 rounded-full text-sm font-medium transition-all hover:bg-white/10" data-screen="app">
-                        App
-                    </button>
-                    <button onclick="showScreen('tokenomics')" class="nav-tab px-5 py-2 rounded-full text-sm font-medium transition-all hover:bg-white/10" data-screen="tokenomics">
-                        Tokenomics
-                    </button>
-                </div>
-                
-                <!-- Wallet Button -->
-                <button id="walletBtn" onclick="connectWallet()" class="btn-primary px-6 py-2.5 rounded-full font-semibold text-sm">
-                    Connect Wallet
-                </button>
-                <div id="walletConnected" class="hidden items-center gap-3">
-                    <div class="bg-green-500/20 border border-green-500/50 px-4 py-2 rounded-full text-green-400 text-sm font-medium">
-                        <span class="inline-block w-2 h-2 bg-green-400 rounded-full mr-2 animate-pulse"></span>
-                        <span id="walletAddress">Connected</span>
-                    </div>
-                </div>
+    <!-- Nav -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-gray-900/80 backdrop-blur-lg border-b border-gray-800">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <img src="logo2.png" alt="SOLBonds" class="h-10 rounded-lg">
+            </div>
+            <div class="flex gap-6 text-sm">
+                <a href="app.html" class="hover:text-pink-400 transition">App</a>
+                <a href="boosts.html" class="hover:text-pink-400 transition">Boosts</a>
+                <a href="tokenomics.html" class="hover:text-pink-400 transition">Tokenomics</a>
             </div>
         </div>
     </nav>
     
-    <!-- Mobile Nav -->
-    <nav class="md:hidden fixed bottom-0 left-0 right-0 z-50 glass-dark border-t border-white/10">
-        <div class="flex justify-around py-3">
-            <button onclick="showScreen('home')" class="nav-tab flex flex-col items-center gap-1 px-4 py-2" data-screen="home">
-                <span class="text-xl">🏠</span>
-                <span class="text-xs">Home</span>
-            </button>
-            <button onclick="showScreen('app')" class="nav-tab flex flex-col items-center gap-1 px-4 py-2" data-screen="app">
-                <span class="text-xl">💕</span>
-                <span class="text-xs">App</span>
-            </button>
-            <button onclick="showScreen('tokenomics')" class="nav-tab flex flex-col items-center gap-1 px-4 py-2" data-screen="tokenomics">
-                <span class="text-xl">📊</span>
-                <span class="text-xs">Tokenomics</span>
-            </button>
-        </div>
-    </nav>
-
-    <!-- ==================== HOME SCREEN ==================== -->
-    <section id="screen-home" class="relative pt-24 pb-32">
-        <!-- Hero -->
-        <div class="min-h-[90vh] flex items-center justify-center px-4">
-            <div class="text-center max-w-5xl mx-auto">
-                <!-- Floating hearts decoration -->
-                <div class="relative mb-8">
-                    <span class="absolute -left-16 -top-8 text-6xl float opacity-50">💕</span>
-                    <span class="absolute -right-12 top-0 text-4xl float float-delay-1 opacity-40">✨</span>
-                    <span class="absolute left-0 -bottom-4 text-3xl float float-delay-2 opacity-30">💫</span>
-                </div>
-                
-                <h1 class="font-playfair text-6xl md:text-8xl font-bold mb-6 glow-text">
-                    Find Your <span class="text-transparent bg-clip-text gradient-animate">SOLmate</span>
-                </h1>
-                
-                <p class="text-xl md:text-2xl text-white/70 mb-4 font-light max-w-2xl mx-auto">
-                    NFT Matchmaking Meets Real DeFi Yield
-                </p>
-                <p class="text-lg text-white/50 mb-10 max-w-xl mx-auto">
-                    Match based on compatibility. Earn sustainable rewards. Built on Solana.
-                </p>
-                
-                <div class="flex flex-col sm:flex-row gap-4 justify-center mb-16">
-                    <button onclick="showScreen('app')" class="btn-primary px-10 py-4 rounded-full font-bold text-lg pulse-glow">
-                        🚀 Launch App
-                    </button>
-                    <button onclick="showScreen('tokenomics')" class="glass px-10 py-4 rounded-full font-semibold text-lg hover:bg-white/10 transition-all">
-                        📊 View Tokenomics
-                    </button>
-                </div>
-                
-                <!-- Stats -->
-                <div class="grid grid-cols-3 gap-4 max-w-2xl mx-auto">
-                    <div class="glass rounded-2xl p-5 card-hover">
-                        <div class="text-3xl font-bold text-sol-pink mb-1">8% APY</div>
-                        <div class="text-sm text-white/50">Real Vault Yield</div>
-                    </div>
-                    <div class="glass rounded-2xl p-5 card-hover">
-                        <div class="text-3xl font-bold text-green-400 mb-1">$55/day</div>
-                        <div class="text-sm text-white/50">Daily Payouts</div>
-                    </div>
-                    <div class="glass rounded-2xl p-5 card-hover">
-                        <div class="text-3xl font-bold text-sol-cyan mb-1">6x Max</div>
-                        <div class="text-sm text-white/50">Reward Multiplier</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- How It Works -->
-        <div class="max-w-6xl mx-auto px-4 py-20">
-            <h2 class="text-4xl md:text-5xl font-bold text-center mb-4 font-playfair">How SOLBonds Works</h2>
-            <p class="text-center text-white/50 mb-16 max-w-xl mx-auto">Four simple steps to earning sustainable yield through NFT matchmaking</p>
+    <!-- Hero Section -->
+    <div class="gradient-animate min-h-screen flex flex-col items-center justify-center px-4 pt-16">
+        <div class="text-center max-w-4xl">
+            <img src="favicon-logo.png" alt="SOLBonds" class="max-w-2xl mx-auto mb-8 drop-shadow-2xl">
+            <p class="text-3xl mb-4 font-light">
+                NFT Matchmaking Meets Real DeFi Yield
+            </p>
+            <p class="text-xl mb-8 text-gray-200">
+                Match based on compatibility. Earn sustainable rewards. Built on Solana.
+            </p>
             
-            <div class="grid md:grid-cols-4 gap-6">
-                <div class="text-center card-hover">
-                    <div class="w-20 h-20 mx-auto mb-5 rounded-2xl bg-gradient-to-br from-sol-pink to-sol-purple flex items-center justify-center text-4xl float">
+            <div class="flex gap-4 justify-center flex-wrap mb-12">
+                <a href="app.html" class="bg-pink-600 hover:bg-pink-700 text-white font-bold py-4 px-8 rounded-full text-xl pulse-glow transition-all transform hover:scale-105">
+                    🚀 Launch App
+                </a>
+                <a href="boosts.html" class="bg-yellow-500 hover:bg-yellow-400 text-gray-900 font-bold py-4 px-8 rounded-full text-xl transition-all transform hover:scale-105">
+                    ✨ View Boosts
+                </a>
+                <a href="tokenomics.html" class="bg-white/10 hover:bg-white/20 backdrop-blur text-white font-bold py-4 px-8 rounded-full text-xl transition-all">
+                    📊 Tokenomics
+                </a>
+            </div>
+
+            <!-- Stats -->
+            <div class="grid grid-cols-3 gap-8 max-w-2xl mx-auto">
+                <div class="bg-white/10 backdrop-blur rounded-lg p-4">
+                    <div class="text-3xl font-bold text-pink-400">8% APY</div>
+                    <div class="text-sm text-gray-300">Real Vault Yield</div>
+                </div>
+                <div class="bg-white/10 backdrop-blur rounded-lg p-4">
+                    <div class="text-3xl font-bold text-green-400">$55/day</div>
+                    <div class="text-sm text-gray-300">Daily Payouts</div>
+                </div>
+                <div class="bg-white/10 backdrop-blur rounded-lg p-4">
+                    <div class="text-3xl font-bold text-blue-400">Sustainable</div>
+                    <div class="text-sm text-gray-300">No Ponzi Math</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- How It Works -->
+    <div class="bg-gray-900 py-20 px-4">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-5xl font-bold text-center mb-16">How SOLBonds Works</h2>
+            
+            <div class="grid md:grid-cols-4 gap-8">
+                <div class="text-center">
+                    <div class="bg-pink-600 w-20 h-20 rounded-full flex items-center justify-center text-4xl mx-auto mb-4 float">
                         ✨
                     </div>
                     <h3 class="text-xl font-bold mb-2">1. Create Profile</h3>
-                    <p class="text-white/50 text-sm">Set your gender, zodiac, pet preference, and risk tolerance</p>
+                    <p class="text-gray-400">Set your gender, zodiac, pet preference, and risk tolerance</p>
                 </div>
-                
-                <div class="text-center card-hover">
-                    <div class="w-20 h-20 mx-auto mb-5 rounded-2xl bg-gradient-to-br from-sol-purple to-sol-violet flex items-center justify-center text-4xl float float-delay-1">
+
+                <div class="text-center">
+                    <div class="bg-purple-600 w-20 h-20 rounded-full flex items-center justify-center text-4xl mx-auto mb-4 float" style="animation-delay: 0.5s">
                         🔮
                     </div>
                     <h3 class="text-xl font-bold mb-2">2. Get Matched</h3>
-                    <p class="text-white/50 text-sm">Algorithm calculates compatibility scores (up to 100%)</p>
+                    <p class="text-gray-400">Algorithm calculates compatibility scores (up to 100%)</p>
                 </div>
-                
-                <div class="text-center card-hover">
-                    <div class="w-20 h-20 mx-auto mb-5 rounded-2xl bg-gradient-to-br from-sol-violet to-sol-cyan flex items-center justify-center text-4xl float float-delay-2">
+
+                <div class="text-center">
+                    <div class="bg-blue-600 w-20 h-20 rounded-full flex items-center justify-center text-4xl mx-auto mb-4 float" style="animation-delay: 1s">
                         👑
                     </div>
                     <h3 class="text-xl font-bold mb-2">3. Create Bond</h3>
-                    <p class="text-white/50 text-sm">Accept match and start earning from day one</p>
+                    <p class="text-gray-400">Accept match and start earning from day one</p>
                 </div>
-                
-                <div class="text-center card-hover">
-                    <div class="w-20 h-20 mx-auto mb-5 rounded-2xl bg-gradient-to-br from-sol-cyan to-green-400 flex items-center justify-center text-4xl float float-delay-3">
+
+                <div class="text-center">
+                    <div class="bg-green-600 w-20 h-20 rounded-full flex items-center justify-center text-4xl mx-auto mb-4 float" style="animation-delay: 1.5s">
                         💰
                     </div>
                     <h3 class="text-xl font-bold mb-2">4. Earn Rewards</h3>
-                    <p class="text-white/50 text-sm">Higher compatibility + longer bonds = more USDC</p>
+                    <p class="text-gray-400">Higher compatibility + longer bonds = exponentially more USDC</p>
                 </div>
             </div>
         </div>
-        
-        <!-- Compatibility Algorithm -->
-        <div class="max-w-6xl mx-auto px-4 py-20">
-            <h2 class="text-4xl md:text-5xl font-bold text-center mb-4 font-playfair">🎯 Compatibility Algorithm</h2>
-            <p class="text-center text-white/50 mb-12">Multi-factor matching for optimal SOLmate connections</p>
+    </div>
+
+    <!-- ✨ BOOSTS SECTION (NEW!) -->
+    <div class="bg-gradient-to-b from-gray-900 to-gray-800 py-20 px-4">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-5xl font-bold text-center mb-4">✨ Boosts & Power-Ups</h2>
+            <p class="text-center text-gray-400 mb-12 text-xl">Unlock your full potential. Strengthen your bond. Earn more.</p>
             
-            <div class="glass rounded-3xl p-8 border border-sol-pink/30">
-                <div class="grid md:grid-cols-4 gap-6 mb-8">
-                    <div class="text-center p-4 rounded-2xl bg-white/5">
-                        <div class="text-5xl mb-3">⚧️</div>
-                        <div class="font-bold text-lg mb-1">Gender</div>
-                        <div class="text-sol-pink font-semibold">20 points</div>
-                        <div class="text-xs text-white/40 mt-2">Opposite = 20<br>Same = 15</div>
+            <div class="grid md:grid-cols-2 gap-8 mb-12">
+                
+                <!-- Speed Dating -->
+                <div class="bg-gray-800 rounded-2xl p-8 border-2 border-yellow-500 hover:border-yellow-400 transition-all">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="text-5xl float">🎰</div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-yellow-400">Speed Dating</h3>
+                            <p class="text-gray-400">For singles seeking SOLmates</p>
+                        </div>
                     </div>
-                    <div class="text-center p-4 rounded-2xl bg-white/5">
-                        <div class="text-5xl mb-3">🔮</div>
-                        <div class="font-bold text-lg mb-1">Zodiac</div>
-                        <div class="text-sol-purple font-semibold">30 points</div>
-                        <div class="text-xs text-white/40 mt-2">Same element = 30<br>Compatible = 15</div>
+                    
+                    <p class="text-gray-300 mb-6">
+                        Compatibility is <span class="text-yellow-400 font-bold">capped at 70%</span> by default. 
+                        Use Speed Dating boosts to reveal your TRUE compatibility potential!
+                    </p>
+                    
+                    <div class="space-y-3 mb-6">
+                        <div class="flex justify-between items-center bg-gray-700/50 rounded-lg px-4 py-3">
+                            <span>👀 Quick Peek</span>
+                            <span class="text-yellow-400 font-bold">2 USDC</span>
+                        </div>
+                        <div class="flex justify-between items-center bg-gray-700/50 rounded-lg px-4 py-3">
+                            <span>🔮 Deep Reveal (85% cap)</span>
+                            <span class="text-yellow-400 font-bold">5 USDC</span>
+                        </div>
+                        <div class="flex justify-between items-center bg-gradient-to-r from-yellow-600/30 to-orange-600/30 rounded-lg px-4 py-3 border border-yellow-500/50">
+                            <span>💎 Full Unlock (100% cap)</span>
+                            <span class="text-yellow-400 font-bold">10 USDC</span>
+                        </div>
                     </div>
-                    <div class="text-center p-4 rounded-2xl bg-white/5">
-                        <div class="text-5xl mb-3">🐾</div>
-                        <div class="font-bold text-lg mb-1">Pet Type</div>
-                        <div class="text-sol-violet font-semibold">25 points</div>
-                        <div class="text-xs text-white/40 mt-2">Same = 25<br>Flexible = 15</div>
-                    </div>
-                    <div class="text-center p-4 rounded-2xl bg-white/5">
-                        <div class="text-5xl mb-3">🎲</div>
-                        <div class="font-bold text-lg mb-1">Risk Level</div>
-                        <div class="text-sol-cyan font-semibold">25 points</div>
-                        <div class="text-xs text-white/40 mt-2">±2 diff = 25<br>±5 diff = 12</div>
-                    </div>
+                    
+                    <a href="boosts.html" class="block w-full bg-yellow-500 hover:bg-yellow-400 text-gray-900 font-bold py-3 rounded-lg text-center transition-all">
+                        View All Speed Dating Boosts →
+                    </a>
                 </div>
                 
-                <div class="gradient-animate rounded-2xl p-6 text-center">
-                    <div class="text-sm mb-2 opacity-80">Example Perfect Match</div>
+                <!-- Couples Therapy -->
+                <div class="bg-gray-800 rounded-2xl p-8 border-2 border-purple-500 hover:border-purple-400 transition-all">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="text-5xl float" style="animation-delay: 0.5s;">💆</div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-purple-400">Couples Therapy</h3>
+                            <p class="text-gray-400">For bonded pairs growing stronger</p>
+                        </div>
+                    </div>
+                    
+                    <p class="text-gray-300 mb-6">
+                        Already bonded? <span class="text-purple-400 font-bold">Boost your compatibility</span> over time! 
+                        Reach 90%+ to unlock the Soulmate Bonus (2x multiplier)!
+                    </p>
+                    
+                    <div class="space-y-3 mb-6">
+                        <div class="flex justify-between items-center bg-gray-700/50 rounded-lg px-4 py-3">
+                            <span>💬 Quick Chat (+2%)</span>
+                            <span class="text-purple-400 font-bold">3 USDC</span>
+                        </div>
+                        <div class="flex justify-between items-center bg-gray-700/50 rounded-lg px-4 py-3">
+                            <span>🛋️ Full Session (+5%)</span>
+                            <span class="text-purple-400 font-bold">7 USDC</span>
+                        </div>
+                        <div class="flex justify-between items-center bg-gradient-to-r from-purple-600/30 to-pink-600/30 rounded-lg px-4 py-3 border border-purple-500/50">
+                            <span>💝 Intensive Retreat (+12%)</span>
+                            <span class="text-purple-400 font-bold">15 USDC</span>
+                        </div>
+                    </div>
+                    
+                    <a href="boosts.html" class="block w-full bg-purple-500 hover:bg-purple-400 text-white font-bold py-3 rounded-lg text-center transition-all">
+                        View All Therapy Sessions →
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Bonus Boosts Preview -->
+            <div class="bg-gray-800/50 rounded-2xl p-6 border border-gray-700">
+                <h3 class="text-xl font-bold mb-4 text-center text-green-400">🎁 Bonus Boosts</h3>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="text-center p-3 bg-gray-700/30 rounded-lg">
+                        <div class="text-2xl mb-1">⚡</div>
+                        <div class="text-sm font-bold">Priority Queue</div>
+                        <div class="text-xs text-green-400">3 USDC</div>
+                    </div>
+                    <div class="text-center p-3 bg-gray-700/30 rounded-lg">
+                        <div class="text-2xl mb-1">🎲</div>
+                        <div class="text-sm font-bold">Re-roll Match</div>
+                        <div class="text-xs text-green-400">2 USDC</div>
+                    </div>
+                    <div class="text-center p-3 bg-gray-700/30 rounded-lg">
+                        <div class="text-2xl mb-1">✨</div>
+                        <div class="text-sm font-bold">Profile Glow</div>
+                        <div class="text-xs text-green-400">5 USDC</div>
+                    </div>
+                    <div class="text-center p-3 bg-gray-700/30 rounded-lg">
+                        <div class="text-2xl mb-1">🎂</div>
+                        <div class="text-sm font-bold">Anniversary Boost</div>
+                        <div class="text-xs text-green-400">10 USDC</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- The Economics -->
+    <div class="bg-gray-900 py-20 px-4">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-5xl font-bold text-center mb-4">🌱 Sustainable Economics</h2>
+            <p class="text-center text-gray-400 mb-12 text-xl">Not a Ponzi. Real yield from real protocols.</p>
+            
+            <div class="grid md:grid-cols-2 gap-8 mb-12">
+                <!-- Revenue Sources -->
+                <div class="bg-gray-800 rounded-2xl p-8 border-2 border-green-500">
+                    <h3 class="text-2xl font-bold mb-6 text-green-400">📈 Revenue Inflows</h3>
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center">
+                            <span>🌱 DeFi Vault Yield (8% APY)</span>
+                            <span class="font-bold text-green-400">$10.96/day</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span>🎰 Speed Dating Boosts</span>
+                            <span class="font-bold text-green-400">$15/day</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span>💕 Mint Fees (5 USDC)</span>
+                            <span class="font-bold text-green-400">$15/day</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span>💆 Couples Therapy</span>
+                            <span class="font-bold text-green-400">$10/day</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span>💔 Breakup Penalties</span>
+                            <span class="font-bold text-green-400">$5/day</span>
+                        </div>
+                        <div class="pt-4 border-t border-gray-700 flex justify-between items-center text-xl">
+                            <span class="font-bold">Total Daily Inflow:</span>
+                            <span class="font-bold text-green-400">$55.96</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Vault Allocation -->
+                <div class="bg-gray-800 rounded-2xl p-8 border-2 border-blue-500">
+                    <h3 class="text-2xl font-bold mb-6 text-blue-400">🏦 Vault Allocation</h3>
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center">
+                            <span>🌊 Kamino (40%)</span>
+                            <span class="font-bold">$20,000</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span>📊 MarginFi (25%)</span>
+                            <span class="font-bold">$12,500</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span>⚡ Sanctum (20%)</span>
+                            <span class="font-bold">$10,000</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span>🌀 Orca (10%)</span>
+                            <span class="font-bold">$5,000</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span>🔥 SolBlaze (5%)</span>
+                            <span class="font-bold">$2,500</span>
+                        </div>
+                        <div class="pt-4 border-t border-gray-700 flex justify-between items-center text-xl">
+                            <span class="font-bold">Total Vault:</span>
+                            <span class="font-bold text-blue-400">$50,000</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-gradient-to-r from-green-900 to-green-800 rounded-2xl p-8 border-2 border-green-500 text-center">
+                <div class="text-3xl font-bold mb-2">The Formula</div>
+                <div class="text-xl font-mono mb-4">
+                    Daily Earnings = <span class="text-green-400">(Real Yield + User Fees)</span> ÷ Active Pairs × <span class="text-yellow-400">Time Tier</span> × <span class="text-pink-400">Compatibility</span>
+                </div>
+                <p class="text-green-200">Only distribute what actually comes in. No printing. No ponzi.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Compatibility System -->
+    <div class="bg-gradient-to-b from-gray-900 to-gray-800 py-20 px-4">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-5xl font-bold text-center mb-12">🎯 Compatibility Algorithm</h2>
+            
+            <div class="bg-gray-800 rounded-2xl p-8 border-2 border-pink-500">
+                <div class="grid md:grid-cols-4 gap-6 mb-8">
+                    <div class="text-center">
+                        <div class="text-5xl mb-3">⚧️</div>
+                        <div class="font-bold text-xl mb-2">Gender</div>
+                        <div class="text-gray-400">20 points max</div>
+                        <div class="text-sm text-gray-500 mt-2">Opposite = 20pts<br>Same = 15pts</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-5xl mb-3">🔮</div>
+                        <div class="font-bold text-xl mb-2">Zodiac</div>
+                        <div class="text-gray-400">30 points max</div>
+                        <div class="text-sm text-gray-500 mt-2">Same element = 30pts<br>Compatible = 15pts</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-5xl mb-3">🐾</div>
+                        <div class="font-bold text-xl mb-2">Pet Type</div>
+                        <div class="text-gray-400">25 points max</div>
+                        <div class="text-sm text-gray-500 mt-2">Same = 25pts<br>Flexible = 15pts<br>Opposite = 0pts</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-5xl mb-3">🎲</div>
+                        <div class="font-bold text-xl mb-2">Risk Level</div>
+                        <div class="text-gray-400">25 points max</div>
+                        <div class="text-sm text-gray-500 mt-2">±2 diff = 25pts<br>±5 diff = 12pts<br>More = 5pts</div>
+                    </div>
+                </div>
+
+                <div class="bg-gradient-to-r from-pink-600 to-purple-600 rounded-xl p-6 text-center">
+                    <div class="text-lg mb-2">Example High Match</div>
                     <div class="text-6xl font-bold mb-4">95%</div>
                     <div class="grid grid-cols-4 gap-4 text-sm">
-                        <div>⚧️ 20/20</div>
-                        <div>🔮 30/30</div>
-                        <div>🐾 25/25</div>
-                        <div>🎲 20/25</div>
+                        <div>⚧️ Gender: 20/20</div>
+                        <div>🔮 Zodiac: 30/30</div>
+                        <div>🐾 Pets: 25/25</div>
+                        <div>🎲 Risk: 20/25</div>
                     </div>
-                    <div class="mt-4 text-lg font-bold">→ Earns 2.0x Soulmate Bonus! 🔥</div>
+                    <div class="mt-4 text-yellow-300 font-bold">
+                        → Earns 2.0x Reward Multiplier! 🔥
+                    </div>
                 </div>
             </div>
         </div>
-        
-        <!-- Time-Based Tiers -->
-        <div class="max-w-6xl mx-auto px-4 py-20">
-            <h2 class="text-4xl md:text-5xl font-bold text-center mb-4 font-playfair">⏰ Time-Based Reward Tiers</h2>
-            <p class="text-center text-white/50 mb-12">The longer you stay bonded, the higher your multiplier</p>
+    </div>
+
+    <!-- Reward Tiers -->
+    <div class="bg-gray-900 py-20 px-4">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-5xl font-bold text-center mb-4">⏰ Time-Based Reward Tiers</h2>
+            <p class="text-center text-gray-400 mb-12 text-xl">The longer you stay bonded, the higher your share</p>
             
-            <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
-                <div class="tier-bronze rounded-2xl p-5 text-center card-hover">
-                    <div class="text-3xl mb-2">🥉</div>
-                    <div class="font-bold">Bronze</div>
-                    <div class="text-xs opacity-70 mb-2">Days 1-7</div>
-                    <div class="text-2xl font-bold">1.0x</div>
+            <div class="grid md:grid-cols-5 gap-4">
+                <div class="bg-gray-700 rounded-lg p-6 text-center border-2 border-gray-600">
+                    <div class="text-2xl mb-2">🥉</div>
+                    <div class="font-bold text-lg mb-2">Bronze</div>
+                    <div class="text-sm text-gray-400 mb-2">Days 1-7</div>
+                    <div class="text-3xl font-bold text-yellow-400">1.0x</div>
                 </div>
-                <div class="tier-silver rounded-2xl p-5 text-center card-hover">
-                    <div class="text-3xl mb-2">🥈</div>
-                    <div class="font-bold">Silver</div>
-                    <div class="text-xs opacity-70 mb-2">Days 8-30</div>
-                    <div class="text-2xl font-bold">1.5x</div>
+
+                <div class="bg-gray-700 rounded-lg p-6 text-center border-2 border-gray-500">
+                    <div class="text-2xl mb-2">🥈</div>
+                    <div class="font-bold text-lg mb-2">Silver</div>
+                    <div class="text-sm text-gray-400 mb-2">Days 8-30</div>
+                    <div class="text-3xl font-bold text-yellow-400">1.5x</div>
                 </div>
-                <div class="tier-gold rounded-2xl p-5 text-center card-hover">
-                    <div class="text-3xl mb-2">🥇</div>
-                    <div class="font-bold text-sol-dark">Gold</div>
-                    <div class="text-xs opacity-70 mb-2 text-sol-dark">Days 31-90</div>
-                    <div class="text-2xl font-bold text-sol-dark">2.5x</div>
+
+                <div class="bg-gradient-to-br from-yellow-600 to-yellow-700 rounded-lg p-6 text-center border-2 border-yellow-400">
+                    <div class="text-2xl mb-2">🥇</div>
+                    <div class="font-bold text-lg mb-2">Gold</div>
+                    <div class="text-sm text-yellow-200 mb-2">Days 31-90</div>
+                    <div class="text-3xl font-bold text-white">2.5x</div>
                 </div>
-                <div class="tier-diamond rounded-2xl p-5 text-center card-hover">
-                    <div class="text-3xl mb-2">💎</div>
-                    <div class="font-bold text-sol-dark">Diamond</div>
-                    <div class="text-xs opacity-70 mb-2 text-sol-dark">Days 91-180</div>
-                    <div class="text-2xl font-bold text-sol-dark">4.0x</div>
+
+                <div class="bg-gradient-to-br from-purple-600 to-purple-700 rounded-lg p-6 text-center border-2 border-purple-400">
+                    <div class="text-2xl mb-2">💎</div>
+                    <div class="font-bold text-lg mb-2">Diamond</div>
+                    <div class="text-sm text-purple-200 mb-2">Days 91-180</div>
+                    <div class="text-3xl font-bold text-white">4.0x</div>
                 </div>
-                <div class="tier-legendary rounded-2xl p-5 text-center card-hover col-span-2 md:col-span-1 pulse-glow">
-                    <div class="text-3xl mb-2">👑</div>
-                    <div class="font-bold">Legendary</div>
-                    <div class="text-xs opacity-70 mb-2">Days 181+</div>
-                    <div class="text-2xl font-bold">6.0x</div>
+
+                <div class="bg-gradient-to-br from-pink-600 to-pink-700 rounded-lg p-6 text-center border-2 border-pink-400 pulse-glow">
+                    <div class="text-2xl mb-2">👑</div>
+                    <div class="font-bold text-lg mb-2">Legendary</div>
+                    <div class="text-sm text-pink-200 mb-2">Days 181+</div>
+                    <div class="text-3xl font-bold text-white">6.0x</div>
                 </div>
             </div>
         </div>
-        
-        <!-- CTA -->
-        <div class="max-w-4xl mx-auto px-4 py-20 text-center">
-            <div class="gradient-animate rounded-3xl p-12">
-                <h2 class="text-4xl md:text-5xl font-bold mb-6 font-playfair">Ready to Find Your SOLmate?</h2>
-                <p class="text-xl mb-8 opacity-90">Join the first sustainable NFT matchmaking protocol</p>
-                <button onclick="showScreen('app')" class="bg-white text-sol-dark hover:bg-white/90 font-bold py-4 px-10 rounded-full text-xl transition-all transform hover:scale-105 shadow-2xl">
+    </div>
+
+    <!-- CTA -->
+    <div class="bg-gradient-to-r from-pink-600 via-purple-600 to-blue-600 py-20 px-4">
+        <div class="max-w-4xl mx-auto text-center">
+            <h2 class="text-5xl font-bold mb-6">Ready to Find Your SOLmate?</h2>
+            <p class="text-2xl mb-8 text-gray-100">Join the first sustainable NFT matchmaking protocol</p>
+            <div class="flex gap-4 justify-center flex-wrap">
+                <a href="app.html" class="inline-block bg-white text-pink-600 hover:bg-gray-100 font-bold py-5 px-10 rounded-full text-2xl transition-all transform hover:scale-105 shadow-2xl">
                     🚀 Launch App
-                </button>
-                <div class="mt-8 flex flex-wrap justify-center gap-6 text-sm opacity-80">
-                    <span>✅ 5 USDC mint fee</span>
-                    <span>✅ 8% real APY</span>
-                    <span>✅ Built on Solana</span>
-                    <span>✅ Fully sustainable</span>
-                </div>
+                </a>
+                <a href="boosts.html" class="inline-block bg-yellow-400 text-gray-900 hover:bg-yellow-300 font-bold py-5 px-10 rounded-full text-2xl transition-all transform hover:scale-105 shadow-2xl">
+                    ✨ View Boosts
+                </a>
+            </div>
+            
+            <div class="mt-12 flex justify-center gap-8 text-sm text-gray-200 flex-wrap">
+                <span>✅ 5 USDC mint fee</span>
+                <span>✅ 8% real APY</span>
+                <span>✅ Built on Solana</span>
+                <span>✅ Fully sustainable</span>
             </div>
         </div>
-    </section>
+    </div>
 
-    <!-- ==================== APP SCREEN ==================== -->
-    <section id="screen-app" class="hidden pt-24 pb-32 min-h-screen">
-        
-        <!-- App Welcome -->
-        <div id="app-welcome" class="max-w-3xl mx-auto px-4 py-20 text-center">
-            <div class="gradient-animate rounded-3xl p-12 relative overflow-hidden">
-                <div class="absolute top-4 left-4 text-4xl float">💕</div>
-                <div class="absolute top-4 right-4 text-3xl float float-delay-1">✨</div>
-                <div class="absolute bottom-4 left-8 text-2xl float float-delay-2">💫</div>
-                
-                <div class="text-8xl mb-6 heartbeat">💕</div>
-                <h1 class="text-5xl font-bold mb-4 font-playfair">Welcome to SOLBonds</h1>
-                <p class="text-xl mb-8 opacity-90">Match NFTs. Earn Real Yield. Build Bonds.</p>
-                <button onclick="showAppScreen('profile')" class="bg-white text-sol-dark font-bold py-4 px-10 rounded-full text-xl hover:bg-white/90 transition-all">
-                    Get Started ✨
-                </button>
-            </div>
-        </div>
-        
-        <!-- Profile Creation -->
-        <div id="app-profile" class="hidden max-w-2xl mx-auto px-4 py-12">
-            <h2 class="text-4xl font-bold mb-8 text-center font-playfair">Create Your Profile</h2>
-            
-            <div class="glass rounded-3xl p-8 space-y-8">
-                <!-- Username -->
-                <div>
-                    <label class="block text-lg font-semibold mb-3 text-sol-pink">Username</label>
-                    <input type="text" id="username" placeholder="Enter your username" 
-                        class="w-full bg-white/5 border border-white/10 rounded-xl px-5 py-4 text-white placeholder-white/30 focus:outline-none focus:border-sol-pink transition-all">
-                </div>
-                
-                <!-- Gender -->
-                <div>
-                    <label class="block text-lg font-semibold mb-3 text-sol-pink">Gender</label>
-                    <div class="grid grid-cols-2 gap-4">
-                        <button class="select-btn gender-btn glass rounded-xl p-5 text-center transition-all hover:bg-white/10" data-value="0">
-                            <div class="text-5xl mb-2">♂️</div>
-                            <div class="font-medium">Masculine</div>
-                        </button>
-                        <button class="select-btn gender-btn glass rounded-xl p-5 text-center transition-all hover:bg-white/10" data-value="1">
-                            <div class="text-5xl mb-2">♀️</div>
-                            <div class="font-medium">Feminine</div>
-                        </button>
-                    </div>
-                </div>
-                
-                <!-- Zodiac -->
-                <div>
-                    <label class="block text-lg font-semibold mb-3 text-sol-purple">Zodiac Sign</label>
-                    <select id="zodiac" class="w-full bg-sol-dark border border-white/10 rounded-xl px-5 py-4 text-white focus:outline-none focus:border-sol-purple transition-all">
-                        <option value="">Select your sign...</option>
-                        <option value="1">♈ Aries</option>
-                        <option value="2">♉ Taurus</option>
-                        <option value="3">♊ Gemini</option>
-                        <option value="4">♋ Cancer</option>
-                        <option value="5">♌ Leo</option>
-                        <option value="6">♍ Virgo</option>
-                        <option value="7">♎ Libra</option>
-                        <option value="8">♏ Scorpio</option>
-                        <option value="9">♐ Sagittarius</option>
-                        <option value="10">♑ Capricorn</option>
-                        <option value="11">♒ Aquarius</option>
-                        <option value="12">♓ Pisces</option>
-                    </select>
-                </div>
-                
-                <!-- Pet -->
-                <div>
-                    <label class="block text-lg font-semibold mb-3 text-sol-violet">Pet Preference</label>
-                    <div class="grid grid-cols-3 gap-4">
-                        <button class="select-btn pet-btn glass rounded-xl p-4 text-center transition-all hover:bg-white/10" data-value="0">
-                            <div class="text-4xl mb-2">🐕</div>
-                            <div class="font-medium text-sm">Dog</div>
-                        </button>
-                        <button class="select-btn pet-btn glass rounded-xl p-4 text-center transition-all hover:bg-white/10" data-value="1">
-                            <div class="text-4xl mb-2">🐈</div>
-                            <div class="font-medium text-sm">Cat</div>
-                        </button>
-                        <button class="select-btn pet-btn glass rounded-xl p-4 text-center transition-all hover:bg-white/10" data-value="2">
-                            <div class="text-4xl mb-2">🦎</div>
-                            <div class="font-medium text-sm">Other</div>
-                        </button>
-                    </div>
-                </div>
-                
-                <!-- Risk -->
-                <div>
-                    <label class="block text-lg font-semibold mb-3 text-sol-cyan">
-                        Risk Tolerance: <span id="riskValue" class="text-white">5</span>/10
-                    </label>
-                    <input type="range" id="risk" min="1" max="10" value="5" class="w-full">
-                    <div class="flex justify-between text-xs text-white/40 mt-2">
-                        <span>Conservative</span>
-                        <span>Balanced</span>
-                        <span>Degen</span>
-                    </div>
-                </div>
-                
-                <button id="createProfileBtn" class="w-full btn-primary py-4 rounded-xl font-bold text-lg">
-                    Create Profile (5 USDC) ✨
-                </button>
-            </div>
-        </div>
-        
-        <!-- Match Screen -->
-        <div id="app-match" class="hidden max-w-3xl mx-auto px-4 py-12">
-            <h2 class="text-4xl font-bold mb-8 text-center font-playfair">Your Match!</h2>
-            
-            <div class="gradient-animate rounded-3xl p-10 text-center mb-8">
-                <div class="relative inline-block mb-6">
-                    <div class="text-8xl font-bold" id="compatScore">85%</div>
-                    <div class="absolute -top-2 -right-2 text-3xl">💕</div>
-                </div>
-                <div class="text-2xl mb-6 font-playfair">Compatibility Score</div>
-                
-                <div id="breakdown" class="grid grid-cols-4 gap-4 max-w-xl mx-auto">
-                    <!-- Filled by JS -->
-                </div>
-            </div>
-            
-            <div class="flex gap-4 justify-center">
-                <button id="rejectBtn" class="glass px-8 py-4 rounded-full font-semibold text-lg hover:bg-red-500/20 transition-all border border-red-500/30">
-                    ❌ Pass
-                </button>
-                <button id="acceptBtn" class="btn-primary px-8 py-4 rounded-full font-semibold text-lg">
-                    ✅ Accept Match
-                </button>
-            </div>
-        </div>
-        
-        <!-- Bond Dashboard -->
-        <div id="app-bond" class="hidden max-w-4xl mx-auto px-4 py-12">
-            <h2 class="text-4xl font-bold mb-8 text-center font-playfair">💕 Your Bond</h2>
-            
-            <div class="grid md:grid-cols-2 gap-6 mb-8">
-                <!-- Bond Details -->
-                <div class="glass rounded-3xl p-8 border border-sol-pink/30">
-                    <h3 class="text-xl font-bold mb-6 text-sol-pink">Bond Details</h3>
-                    <div class="space-y-4">
-                        <div class="flex justify-between items-center">
-                            <span class="text-white/60">Duration</span>
-                            <span class="font-bold text-2xl" id="bondDays">45 days</span>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <span class="text-white/60">Compatibility</span>
-                            <span class="font-bold text-2xl" id="bondCompat">85%</span>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <span class="text-white/60">Current Tier</span>
-                            <span class="font-bold text-2xl text-yellow-400" id="bondTier">🥇 Gold</span>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <span class="text-white/60">Multiplier</span>
-                            <span class="font-bold text-3xl gradient-animate bg-clip-text text-transparent" id="bondMult">3.75x</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Earnings -->
-                <div class="glass rounded-3xl p-8 border border-green-500/30">
-                    <h3 class="text-xl font-bold mb-6 text-green-400">Earnings</h3>
-                    <div class="space-y-4">
-                        <div class="flex justify-between items-center">
-                            <span class="text-white/60">Daily Rate</span>
-                            <span class="font-bold text-2xl text-green-400" id="dailyRate">$10.49</span>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <span class="text-white/60">Total Earned</span>
-                            <span class="font-bold text-3xl text-green-400" id="totalEarned">$471.00</span>
-                        </div>
-                        <button class="w-full bg-green-500 hover:bg-green-400 text-sol-dark font-bold py-4 rounded-xl mt-4 transition-all">
-                            💰 Claim Rewards
-                        </button>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="glass rounded-2xl p-6 text-center">
-                <p class="text-white/60 mb-2">Keep your bond strong! Breaking up costs 5 USDC and resets your tier.</p>
-                <button class="text-red-400 text-sm hover:text-red-300 transition-all">
-                    💔 Break Bond
-                </button>
-            </div>
-        </div>
-    </section>
-
-    <!-- ==================== TOKENOMICS SCREEN ==================== -->
-    <section id="screen-tokenomics" class="hidden pt-24 pb-32">
-        <div class="max-w-7xl mx-auto px-4">
-            <h1 class="text-5xl font-bold text-center mb-4 font-playfair">💰 Treasury Dashboard</h1>
-            <p class="text-center text-white/50 mb-12 text-xl">Real Yield, Real Economics, Real Sustainability</p>
-            
-            <!-- Overview Stats -->
-            <div class="grid md:grid-cols-4 gap-4 mb-8">
-                <div class="glass rounded-2xl p-6 border border-green-500/30 card-hover">
-                    <div class="text-sm text-green-400 mb-2">Total Vault Balance</div>
-                    <div class="text-3xl font-bold">$50,000</div>
-                    <div class="text-xs text-white/40 mt-1">Earning 8% APY</div>
-                </div>
-                <div class="glass rounded-2xl p-6 border border-blue-500/30 card-hover">
-                    <div class="text-sm text-blue-400 mb-2">24h Yield Generated</div>
-                    <div class="text-3xl font-bold">$10.96</div>
-                    <div class="text-xs text-white/40 mt-1">From vault protocols</div>
-                </div>
-                <div class="glass rounded-2xl p-6 border border-purple-500/30 card-hover">
-                    <div class="text-sm text-purple-400 mb-2">24h User Fees</div>
-                    <div class="text-3xl font-bold">$45.00</div>
-                    <div class="text-xs text-white/40 mt-1">Bets + penalties + mints</div>
-                </div>
-                <div class="glass rounded-2xl p-6 border border-sol-pink/30 card-hover">
-                    <div class="text-sm text-sol-pink mb-2">Total Daily Payout</div>
-                    <div class="text-3xl font-bold">$55.96</div>
-                    <div class="text-xs text-white/40 mt-1">Sustainable distribution</div>
-                </div>
-            </div>
-            
-            <!-- Revenue Breakdown -->
-            <div class="glass rounded-3xl p-8 mb-8 border border-white/10">
-                <h2 class="text-2xl font-bold mb-6">📊 24-Hour Revenue Sources</h2>
-                
-                <div class="space-y-4">
-                    <div class="flex items-center justify-between bg-white/5 rounded-xl p-4">
-                        <div class="flex items-center gap-4">
-                            <span class="text-3xl">🎰</span>
-                            <div>
-                                <div class="font-semibold">Discovery Bets</div>
-                                <div class="text-sm text-white/40">Users paying to see compatibility early</div>
-                            </div>
-                        </div>
-                        <div class="text-right">
-                            <div class="text-xl font-bold text-green-400">$15.00</div>
-                            <div class="text-xs text-white/40">15 bets × $1 avg</div>
-                        </div>
-                    </div>
-                    
-                    <div class="flex items-center justify-between bg-white/5 rounded-xl p-4">
-                        <div class="flex items-center gap-4">
-                            <span class="text-3xl">💕</span>
-                            <div>
-                                <div class="font-semibold">Bonding Deposits (5 USDC)</div>
-                                <div class="text-sm text-white/40">New profiles minted today</div>
-                            </div>
-                        </div>
-                        <div class="text-right">
-                            <div class="text-xl font-bold text-green-400">$15.00</div>
-                            <div class="text-xs text-white/40">3 mints × $5</div>
-                        </div>
-                    </div>
-                    
-                    <div class="flex items-center justify-between bg-white/5 rounded-xl p-4">
-                        <div class="flex items-center gap-4">
-                            <span class="text-3xl">💔</span>
-                            <div>
-                                <div class="font-semibold">Break-up Penalties</div>
-                                <div class="text-sm text-white/40">Early bond terminations</div>
-                            </div>
-                        </div>
-                        <div class="text-right">
-                            <div class="text-xl font-bold text-green-400">$10.00</div>
-                            <div class="text-xs text-white/40">2 breakups × $5</div>
-                        </div>
-                    </div>
-                    
-                    <div class="flex items-center justify-between bg-white/5 rounded-xl p-4">
-                        <div class="flex items-center gap-4">
-                            <span class="text-3xl">🎁</span>
-                            <div>
-                                <div class="font-semibold">Boost Stakes</div>
-                                <div class="text-sm text-white/40">Premium matching features</div>
-                            </div>
-                        </div>
-                        <div class="text-right">
-                            <div class="text-xl font-bold text-green-400">$5.00</div>
-                            <div class="text-xs text-white/40">5 boosts × $1</div>
-                        </div>
-                    </div>
-                    
-                    <div class="flex items-center justify-between bg-gradient-to-r from-blue-600/30 to-blue-500/20 rounded-xl p-4 border border-blue-500/30">
-                        <div class="flex items-center gap-4">
-                            <span class="text-3xl">🌱</span>
-                            <div>
-                                <div class="font-bold text-lg">Real Vault Yield</div>
-                                <div class="text-sm text-blue-300">Kamino + MarginFi + Sanctum</div>
-                            </div>
-                        </div>
-                        <div class="text-right">
-                            <div class="text-2xl font-bold text-yellow-400">$10.96</div>
-                            <div class="text-xs text-blue-300">8% APY on $50k vault</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="mt-6 pt-6 border-t border-white/10 flex justify-between items-center">
-                    <div class="text-xl font-bold">Total 24h Inflow:</div>
-                    <div class="text-3xl font-bold text-green-400">$55.96</div>
-                </div>
-            </div>
-            
-            <!-- Vault Allocation -->
-            <div class="glass rounded-3xl p-8 mb-8 border border-white/10">
-                <h2 class="text-2xl font-bold mb-6">🏦 Stablecoin Vault Allocation</h2>
-                
-                <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
-                    <div class="bg-gradient-to-br from-orange-600/30 to-orange-700/20 rounded-xl p-4 text-center border border-orange-500/30">
-                        <div class="text-2xl mb-2">🌊</div>
-                        <div class="font-bold">Kamino</div>
-                        <div class="text-xs text-orange-300 mb-1">40%</div>
-                        <div class="font-semibold">$20,000</div>
-                        <div class="text-xs text-white/40">~24% APY</div>
-                    </div>
-                    <div class="bg-gradient-to-br from-green-600/30 to-green-700/20 rounded-xl p-4 text-center border border-green-500/30">
-                        <div class="text-2xl mb-2">📊</div>
-                        <div class="font-bold">MarginFi</div>
-                        <div class="text-xs text-green-300 mb-1">25%</div>
-                        <div class="font-semibold">$12,500</div>
-                        <div class="text-xs text-white/40">~6% APY</div>
-                    </div>
-                    <div class="bg-gradient-to-br from-purple-600/30 to-purple-700/20 rounded-xl p-4 text-center border border-purple-500/30">
-                        <div class="text-2xl mb-2">⚡</div>
-                        <div class="font-bold">Sanctum</div>
-                        <div class="text-xs text-purple-300 mb-1">20%</div>
-                        <div class="font-semibold">$10,000</div>
-                        <div class="text-xs text-white/40">~7% APY</div>
-                    </div>
-                    <div class="bg-gradient-to-br from-blue-600/30 to-blue-700/20 rounded-xl p-4 text-center border border-blue-500/30">
-                        <div class="text-2xl mb-2">🌀</div>
-                        <div class="font-bold">Orca</div>
-                        <div class="text-xs text-blue-300 mb-1">10%</div>
-                        <div class="font-semibold">$5,000</div>
-                        <div class="text-xs text-white/40">~5% APY</div>
-                    </div>
-                    <div class="bg-gradient-to-br from-red-600/30 to-red-700/20 rounded-xl p-4 text-center border border-red-500/30">
-                        <div class="text-2xl mb-2">🔥</div>
-                        <div class="font-bold">SolBlaze</div>
-                        <div class="text-xs text-red-300 mb-1">5%</div>
-                        <div class="font-semibold">$2,500</div>
-                        <div class="text-xs text-white/40">~8% APY</div>
-                    </div>
-                </div>
-                
-                <div class="bg-green-500/10 border border-green-500/30 rounded-xl p-4 text-center">
-                    <div class="text-sm text-green-300 mb-1">Blended Vault APY</div>
-                    <div class="text-4xl font-bold text-green-400">~8.0%</div>
-                    <div class="text-xs text-green-300 mt-1">= $10.96 per day</div>
-                </div>
-            </div>
-            
-            <!-- Calculator -->
-            <div class="glass rounded-3xl p-8 mb-8 border border-sol-purple/30">
-                <h2 class="text-2xl font-bold mb-6">🧮 Earnings Calculator</h2>
-                
-                <div class="grid md:grid-cols-3 gap-6 mb-8">
-                    <div>
-                        <label class="block text-sm font-semibold mb-3 text-purple-300">Active Pairs</label>
-                        <input type="range" id="calcPairs" min="5" max="100" value="20" class="w-full">
-                        <div class="text-center mt-2">
-                            <span id="calcPairsDisplay" class="text-3xl font-bold">20</span>
-                            <span class="text-white/40"> pairs</span>
-                        </div>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-semibold mb-3 text-pink-300">Bond Days</label>
-                        <input type="range" id="calcDays" min="1" max="200" value="45" class="w-full">
-                        <div class="text-center mt-2">
-                            <span id="calcDaysDisplay" class="text-3xl font-bold">45</span>
-                            <span class="text-white/40"> days</span>
-                        </div>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-semibold mb-3 text-cyan-300">Compatibility</label>
-                        <input type="range" id="calcCompat" min="50" max="100" value="85" class="w-full">
-                        <div class="text-center mt-2">
-                            <span id="calcCompatDisplay" class="text-3xl font-bold">85</span>
-                            <span class="text-white/40">%</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Formula Display -->
-                <div class="bg-sol-dark rounded-2xl p-6 mb-6">
-                    <h3 class="text-lg font-bold mb-4 text-center">The Sustainable Formula</h3>
-                    <div class="font-mono text-center text-sm md:text-base mb-4">
-                        Daily = <span class="text-green-400">(Yield + Fees)</span> ÷ Pairs × <span class="text-yellow-400">Tier</span> × <span class="text-pink-400">Compat</span>
-                    </div>
-                    
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-                        <div class="bg-white/5 rounded-lg p-3">
-                            <div class="text-xs text-white/40 mb-1">24h Inflow</div>
-                            <div class="text-xl font-bold text-green-400">$55.96</div>
-                        </div>
-                        <div class="bg-white/5 rounded-lg p-3">
-                            <div class="text-xs text-white/40 mb-1">Your Tier</div>
-                            <div class="text-xl font-bold text-yellow-400" id="calcTier">2.5x</div>
-                            <div class="text-xs text-white/40" id="calcTierName">Gold</div>
-                        </div>
-                        <div class="bg-white/5 rounded-lg p-3">
-                            <div class="text-xs text-white/40 mb-1">Compat Bonus</div>
-                            <div class="text-xl font-bold text-pink-400" id="calcCompatMult">1.5x</div>
-                        </div>
-                        <div class="bg-gradient-to-r from-sol-pink/30 to-sol-purple/30 rounded-lg p-3 border border-sol-pink/30">
-                            <div class="text-xs text-sol-pink mb-1">Your Daily Share</div>
-                            <div class="text-xl font-bold" id="calcEarnings">$10.49</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Steps -->
-                <div class="space-y-3 text-sm">
-                    <div class="bg-white/5 rounded-lg p-3">
-                        <span class="text-white/40">Step 1:</span> 
-                        <span id="calcStep1" class="font-mono">$55.96 ÷ 20 pairs = $2.80 per pair</span>
-                    </div>
-                    <div class="bg-white/5 rounded-lg p-3">
-                        <span class="text-white/40">Step 2:</span> 
-                        <span id="calcStep2" class="font-mono">$2.80 × 2.5 (Gold) = $7.00</span>
-                    </div>
-                    <div class="bg-white/5 rounded-lg p-3">
-                        <span class="text-white/40">Step 3:</span> 
-                        <span id="calcStep3" class="font-mono">$7.00 × 1.5 (85% compat) = $10.49</span>
-                    </div>
-                    <div class="bg-gradient-to-r from-green-600/30 to-green-500/20 rounded-lg p-4 border border-green-500/30">
-                        <span class="text-green-300">Result:</span> 
-                        <span id="calcResult" class="font-bold text-lg">$10.49 USDC/day</span>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Why Sustainable -->
-            <div class="grid md:grid-cols-2 gap-6">
-                <div class="glass rounded-2xl p-6 border border-green-500/30">
-                    <h3 class="text-xl font-bold mb-4 text-green-400">✅ Why SOLBonds is Sustainable</h3>
-                    <ul class="space-y-3 text-sm">
-                        <li class="flex gap-3">
-                            <span class="text-green-400">1.</span>
-                            <span><strong>No Printing Money:</strong> Only distribute actual revenue</span>
-                        </li>
-                        <li class="flex gap-3">
-                            <span class="text-green-400">2.</span>
-                            <span><strong>Real Yield Base:</strong> $10.96/day from DeFi protocols</span>
-                        </li>
-                        <li class="flex gap-3">
-                            <span class="text-green-400">3.</span>
-                            <span><strong>User Fees:</strong> Bets, mints, penalties add $45/day</span>
-                        </li>
-                        <li class="flex gap-3">
-                            <span class="text-green-400">4.</span>
-                            <span><strong>Principal Protected:</strong> Vault grows, never drains</span>
-                        </li>
-                    </ul>
-                </div>
-                
-                <div class="glass rounded-2xl p-6 border border-red-500/30">
-                    <h3 class="text-xl font-bold mb-4 text-red-400">❌ Old Model (Ponzi)</h3>
-                    <ul class="space-y-3 text-sm">
-                        <li class="flex gap-3">
-                            <span class="text-red-400">1.</span>
-                            <span><strong>Fixed APR Fantasy:</strong> "5% daily" from nowhere</span>
-                        </li>
-                        <li class="flex gap-3">
-                            <span class="text-red-400">2.</span>
-                            <span><strong>Draining Pool:</strong> Empties in days</span>
-                        </li>
-                        <li class="flex gap-3">
-                            <span class="text-red-400">3.</span>
-                            <span><strong>No Inflow:</strong> Only outflow, no regeneration</span>
-                        </li>
-                        <li class="flex gap-3">
-                            <span class="text-red-400">4.</span>
-                            <span><strong>Death Spiral:</strong> Early users win, late users lose</span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            
-            <!-- Protocol Health -->
-            <div class="glass rounded-3xl p-8 mt-8 border border-white/10">
-                <h2 class="text-2xl font-bold mb-6 text-center">📈 Protocol Health</h2>
-                <div class="grid md:grid-cols-3 gap-6 text-center">
-                    <div>
-                        <div class="text-sm text-white/40 mb-2">Vault Growth Rate</div>
-                        <div class="text-4xl font-bold text-green-400">+$10.96</div>
-                        <div class="text-xs text-white/40 mt-1">per day (after payouts)</div>
-                    </div>
-                    <div>
-                        <div class="text-sm text-white/40 mb-2">Payout Ratio</div>
-                        <div class="text-4xl font-bold text-blue-400">80%</div>
-                        <div class="text-xs text-white/40 mt-1">of daily inflow distributed</div>
-                    </div>
-                    <div>
-                        <div class="text-sm text-white/40 mb-2">Treasury Reserve</div>
-                        <div class="text-4xl font-bold text-purple-400">20%</div>
-                        <div class="text-xs text-white/40 mt-1">retained for protocol</div>
-                    </div>
-                </div>
-                
-                <div class="mt-8 bg-green-500/10 border border-green-500/30 rounded-xl p-6 text-center">
-                    <div class="text-xl font-bold mb-2">🎉 Protocol Status: HEALTHY</div>
-                    <div class="text-green-300">Inflow exceeds outflow. Vault growing. Fully sustainable.</div>
-                </div>
-            </div>
-        </div>
-    </section>
-    
     <!-- Footer -->
-    <footer class="glass-dark border-t border-white/10 py-8 px-4 text-center md:mb-0 mb-20">
-        <div class="flex items-center justify-center gap-2 mb-3">
-            <img src="logo.png" alt="SOLBonds" class="w-6 h-6">
-            <span class="font-bold">SOLBonds</span>
+    <div class="bg-gray-950 py-8 px-4 text-center text-gray-500">
+        <div class="flex items-center justify-center gap-2 mb-2">
+            <img src="favicon.png" alt="" class="w-6 h-6">
+            <span class="font-bold text-white">SOLBonds</span>
         </div>
-        <p class="text-white/40 text-sm mb-4">Sustainable DeFi Wrapped in Social Gaming</p>
-        <div class="flex justify-center gap-6 text-sm text-white/40">
-            <a href="#" class="hover:text-sol-pink transition-all">Twitter</a>
-            <a href="#" class="hover:text-sol-pink transition-all">Discord</a>
-            <a href="#" class="hover:text-sol-pink transition-all">GitHub</a>
+        <p class="mb-4">Sustainable DeFi Wrapped in Social Gaming</p>
+        <div class="flex justify-center gap-6 text-sm flex-wrap">
+            <a href="app.html" class="hover:text-pink-400 transition">App</a>
+            <a href="boosts.html" class="hover:text-pink-400 transition">Boosts</a>
+            <a href="tokenomics.html" class="hover:text-pink-400 transition">Tokenomics</a>
+            <a href="#" class="hover:text-pink-400 transition">Twitter</a>
+            <a href="#" class="hover:text-pink-400 transition">Discord</a>
+            <a href="#" class="hover:text-pink-400 transition">GitHub</a>
         </div>
-        <p class="text-white/20 text-xs mt-4">Built for Indie.fun Hackathon 2025</p>
-    </footer>
+        <p class="mt-4 text-xs">Built for Indie.fun Hackathon 2024</p>
+    </div>
 
-    <script>
-        // ==================== STATE ====================
-        let state = {
-            currentScreen: 'home',
-            appScreen: 'welcome',
-            walletConnected: false,
-            profile: null,
-            selectedGender: null,
-            selectedPet: null,
-            compatibility: 0
-        };
-
-        // ==================== NAVIGATION ====================
-        function showScreen(screenName) {
-            document.querySelectorAll('section[id^="screen-"]').forEach(s => s.classList.add('hidden'));
-            document.getElementById(`screen-${screenName}`).classList.remove('hidden');
-            
-            document.querySelectorAll('.nav-tab').forEach(tab => {
-                tab.classList.remove('tab-active', 'bg-white/10');
-                if (tab.dataset.screen === screenName) {
-                    tab.classList.add('tab-active', 'bg-white/10');
-                }
-            });
-            
-            state.currentScreen = screenName;
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        function showAppScreen(screenName) {
-            document.querySelectorAll('[id^="app-"]').forEach(s => s.classList.add('hidden'));
-            document.getElementById(`app-${screenName}`).classList.remove('hidden');
-            state.appScreen = screenName;
-        }
-
-        // ==================== WALLET ====================
-        function connectWallet() {
-            document.getElementById('walletBtn').classList.add('hidden');
-            document.getElementById('walletConnected').classList.remove('hidden');
-            document.getElementById('walletConnected').classList.add('flex');
-            document.getElementById('walletAddress').textContent = 'Abc1...x9Yz';
-            state.walletConnected = true;
-        }
-
-        // ==================== PROFILE ====================
-        // Gender selection
-        document.querySelectorAll('.gender-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                document.querySelectorAll('.gender-btn').forEach(b => b.classList.remove('selected'));
-                this.classList.add('selected');
-                state.selectedGender = parseInt(this.dataset.value);
-            });
-        });
-
-        // Pet selection
-        document.querySelectorAll('.pet-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                document.querySelectorAll('.pet-btn').forEach(b => b.classList.remove('selected'));
-                this.classList.add('selected');
-                state.selectedPet = parseInt(this.dataset.value);
-            });
-        });
-
-        // Risk slider
-        document.getElementById('risk').addEventListener('input', function(e) {
-            document.getElementById('riskValue').textContent = e.target.value;
-        });
-
-        // Create profile
-        document.getElementById('createProfileBtn').addEventListener('click', function() {
-            const username = document.getElementById('username').value;
-            const zodiac = document.getElementById('zodiac').value;
-            const risk = document.getElementById('risk').value;
-
-            if (!username || !zodiac || state.selectedGender === null || state.selectedPet === null) {
-                alert('Please fill all fields! 💕');
-                return;
-            }
-
-            state.profile = {
-                username,
-                zodiac: parseInt(zodiac),
-                gender: state.selectedGender,
-                pet: state.selectedPet,
-                risk: parseInt(risk)
-            };
-
-            const compat = calculateCompatibility();
-            document.getElementById('compatScore').textContent = compat.total + '%';
-            document.getElementById('breakdown').innerHTML = `
-                <div class="bg-white/10 rounded-xl p-3">
-                    <div class="text-2xl mb-1">⚧️</div>
-                    <div class="font-bold">${compat.gender}/20</div>
-                </div>
-                <div class="bg-white/10 rounded-xl p-3">
-                    <div class="text-2xl mb-1">🔮</div>
-                    <div class="font-bold">${compat.zodiac}/30</div>
-                </div>
-                <div class="bg-white/10 rounded-xl p-3">
-                    <div class="text-2xl mb-1">🐾</div>
-                    <div class="font-bold">${compat.pet}/25</div>
-                </div>
-                <div class="bg-white/10 rounded-xl p-3">
-                    <div class="text-2xl mb-1">🎲</div>
-                    <div class="font-bold">${compat.risk}/25</div>
-                </div>
-            `;
-
-            showAppScreen('match');
-        });
-
-        // ==================== COMPATIBILITY ====================
-        function calculateCompatibility() {
-            const matchGender = Math.floor(Math.random() * 2);
-            const matchZodiac = Math.floor(Math.random() * 12) + 1;
-            const matchPet = Math.floor(Math.random() * 3);
-            const matchRisk = Math.floor(Math.random() * 10) + 1;
-
-            const gender = state.profile.gender !== matchGender ? 20 : 15;
-            
-            const fireSign = [1, 5, 9];
-            const earthSign = [2, 6, 10];
-            const airSign = [3, 7, 11];
-            const waterSign = [4, 8, 12];
-            let zodiac = 15;
-            if ((fireSign.includes(state.profile.zodiac) && fireSign.includes(matchZodiac)) ||
-                (earthSign.includes(state.profile.zodiac) && earthSign.includes(matchZodiac)) ||
-                (airSign.includes(state.profile.zodiac) && airSign.includes(matchZodiac)) ||
-                (waterSign.includes(state.profile.zodiac) && waterSign.includes(matchZodiac))) {
-                zodiac = 30;
-            }
-
-            let pet = 0;
-            if (state.profile.pet === matchPet) pet = 25;
-            else if (state.profile.pet === 2 || matchPet === 2) pet = 15;
-
-            const riskDiff = Math.abs(state.profile.risk - matchRisk);
-            let risk = 5;
-            if (riskDiff <= 2) risk = 25;
-            else if (riskDiff <= 5) risk = 12;
-
-            const total = gender + zodiac + pet + risk;
-            state.compatibility = total;
-            return { gender, zodiac, pet, risk, total };
-        }
-
-        // Accept match
-        document.getElementById('acceptBtn').addEventListener('click', function() {
-            document.getElementById('bondCompat').textContent = state.compatibility + '%';
-            
-            let mult = 1.0;
-            let compatMult = 1.0;
-            if (state.compatibility >= 90) compatMult = 2.0;
-            else if (state.compatibility >= 80) compatMult = 1.5;
-            else if (state.compatibility >= 70) compatMult = 1.2;
-            
-            const tierMult = 2.5; // Gold tier for demo
-            mult = tierMult * compatMult;
-            
-            document.getElementById('bondMult').textContent = mult.toFixed(2) + 'x';
-            
-            const dailyInflow = 55.96;
-            const activePairs = 20;
-            const baseShare = dailyInflow / activePairs;
-            const dailyEarn = baseShare * tierMult * compatMult;
-            
-            document.getElementById('dailyRate').textContent = '$' + dailyEarn.toFixed(2);
-            document.getElementById('totalEarned').textContent = '$' + (dailyEarn * 45).toFixed(2);
-            
-            showAppScreen('bond');
-        });
-
-        // Reject match - find new match
-        document.getElementById('rejectBtn').addEventListener('click', function() {
-            const compat = calculateCompatibility();
-            document.getElementById('compatScore').textContent = compat.total + '%';
-            document.getElementById('breakdown').innerHTML = `
-                <div class="bg-white/10 rounded-xl p-3">
-                    <div class="text-2xl mb-1">⚧️</div>
-                    <div class="font-bold">${compat.gender}/20</div>
-                </div>
-                <div class="bg-white/10 rounded-xl p-3">
-                    <div class="text-2xl mb-1">🔮</div>
-                    <div class="font-bold">${compat.zodiac}/30</div>
-                </div>
-                <div class="bg-white/10 rounded-xl p-3">
-                    <div class="text-2xl mb-1">🐾</div>
-                    <div class="font-bold">${compat.pet}/25</div>
-                </div>
-                <div class="bg-white/10 rounded-xl p-3">
-                    <div class="text-2xl mb-1">🎲</div>
-                    <div class="font-bold">${compat.risk}/25</div>
-                </div>
-            `;
-        });
-
-        // ==================== CALCULATOR ====================
-        function getTierInfo(days) {
-            if (days <= 7) return { name: 'Bronze 🥉', mult: 1.0 };
-            if (days <= 30) return { name: 'Silver 🥈', mult: 1.5 };
-            if (days <= 90) return { name: 'Gold 🥇', mult: 2.5 };
-            if (days <= 180) return { name: 'Diamond 💎', mult: 4.0 };
-            return { name: 'Legendary 👑', mult: 6.0 };
-        }
-
-        function getCompatMultiplier(compat) {
-            if (compat >= 90) return 2.0;
-            if (compat >= 80) return 1.5;
-            if (compat >= 70) return 1.2;
-            if (compat >= 60) return 1.0;
-            return 0.8;
-        }
-
-        function updateCalculator() {
-            const pairs = parseInt(document.getElementById('calcPairs').value);
-            const days = parseInt(document.getElementById('calcDays').value);
-            const compat = parseInt(document.getElementById('calcCompat').value);
-            
-            document.getElementById('calcPairsDisplay').textContent = pairs;
-            document.getElementById('calcDaysDisplay').textContent = days;
-            document.getElementById('calcCompatDisplay').textContent = compat;
-            
-            const tier = getTierInfo(days);
-            const compatMult = getCompatMultiplier(compat);
-            const dailyInflow = 55.96;
-            
-            const baseShare = dailyInflow / pairs;
-            const tierAdjusted = baseShare * tier.mult;
-            const finalEarnings = tierAdjusted * compatMult;
-            
-            document.getElementById('calcTier').textContent = tier.mult.toFixed(1) + 'x';
-            document.getElementById('calcTierName').textContent = tier.name;
-            document.getElementById('calcCompatMult').textContent = compatMult.toFixed(1) + 'x';
-            document.getElementById('calcEarnings').textContent = '$' + finalEarnings.toFixed(2);
-            
-            document.getElementById('calcStep1').textContent = `$${dailyInflow.toFixed(2)} ÷ ${pairs} pairs = $${baseShare.toFixed(2)} per pair`;
-            document.getElementById('calcStep2').textContent = `$${baseShare.toFixed(2)} × ${tier.mult.toFixed(1)} (${tier.name.split(' ')[0]}) = $${tierAdjusted.toFixed(2)}`;
-            document.getElementById('calcStep3').textContent = `$${tierAdjusted.toFixed(2)} × ${compatMult.toFixed(1)} (${compat}% compat) = $${finalEarnings.toFixed(2)}`;
-            document.getElementById('calcResult').textContent = `$${finalEarnings.toFixed(2)} USDC/day`;
-        }
-
-        document.getElementById('calcPairs').addEventListener('input', updateCalculator);
-        document.getElementById('calcDays').addEventListener('input', updateCalculator);
-        document.getElementById('calcCompat').addEventListener('input', updateCalculator);
-
-        // ==================== INIT ====================
-        showScreen('home');
-        updateCalculator();
-        
-        console.log('💕 SOLBonds loaded successfully! Find your SOLmate today ✨');
-    </script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
